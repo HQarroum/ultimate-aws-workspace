@@ -1,0 +1,37 @@
+---
+
+- name: Create storage root folder
+  win_file:
+    path: "{{ ansible_user_dir }}/dcv-storage"
+    state: directory
+
+- name: Download Installation Package
+  win_get_url:
+    url: "{{ nicedcv_server_package }}"
+    dest: "{{ ansible_user_dir }}"
+
+- name: Install NiceDCV
+  win_package:
+    path: "{{ ansible_user_dir }}\\{{ nicedcv_msi_name }}"
+    arguments:
+      - ADDLOCAL=ALL
+      - /quiet
+      - /norestart
+      - /l*v
+      - dcv_install_msi.log
+
+- name: Applying NiceDCV Configuration
+  ansible.windows.win_regedit:
+    path: "{{ item.entry }}"
+    name: "{{ item.name }}"
+    data: "{{ item.value }}"
+    type: "{{ item.type }}"
+    state: present
+  register: nicedcv_configuration
+  with_items: "{{ nicedcv_registry_entries }}"
+
+- name: Restart NiceDCV Service
+  win_service:
+    name: DCV Server
+    state: restarted
+  when: nicedcv_configuration.changed

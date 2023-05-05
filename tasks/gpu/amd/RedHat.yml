@@ -1,0 +1,45 @@
+---
+
+- name: Install AMD Dependencies
+  package:
+    name: "{{ item }}"
+    state: latest
+    update_cache: true
+  with_items:
+    - vulkan
+    - "kernel-devel-{{ ansible_kernel }}"
+    - "kernel-headers-{{ ansible_kernel }}"
+  become: true
+  register: amd_dependencies
+
+- name: Reboot
+  reboot:
+    reboot_timeout: 1800
+  become: true
+  when: amd_dependencies.changed
+
+- name: Install AMD Installer
+  yum:
+    name: '{{ amd_installer_url }}'
+    disable_gpg_check: true
+  become: true
+
+- name: Install AMD Drivers
+  command: amdgpu-install -y --accept-eula --opencl=legacy --no-32
+  become: true
+  register: install_amd_drivers
+  args:
+    creates: "{{ amd_gpu_driver }}"
+
+- name: Reboot
+  reboot:
+    reboot_timeout: 1800
+  become: true
+  when: install_amd_drivers.changed
+
+- name: Create xorg.conf file
+  copy:
+    src: files/xorg/xorg.amd.conf
+    dest: '{{ xorg_conf_path }}'
+    mode: 0755
+  become: true

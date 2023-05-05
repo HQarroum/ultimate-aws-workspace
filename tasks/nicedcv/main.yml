@@ -1,0 +1,19 @@
+---
+
+# Verifying whether the current architecture is supported.
+- name: Verify whether the current architecture is supported.
+  fail:
+    msg: >
+      The current architecture '{{ ansible_architecture }}' is not supported
+      by NiceDCV on the current operating system. Please refer to the
+      https://docs.aws.amazon.com/dcv/latest/adminguide/setting-up-installing-linux-server.html
+      page for more information on supported architectures.
+  when: "ansible_architecture not in nicedcv_architecture_map | list"
+
+- name: Include NiceDCV Tasks
+  include_tasks: "{{ ansible_distribution }}.yml"
+  when: ansible_os_family != 'Windows'
+
+- name: Include NiceDCV Tasks
+  include_tasks: Windows.yml
+  when: ansible_os_family == 'Windows'

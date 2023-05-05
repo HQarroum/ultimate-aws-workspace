@@ -1,0 +1,57 @@
+---
+
+- name: Download Signing Keys
+  get_url:
+    url: "{{ item.url }}"
+    dest: "{{ item.dest }}"
+    mode: "0644"
+  with_items: "{{ signing_keys }}"
+  become: true
+
+- name: Add APT Keys
+  apt_key:
+    url: "{{ item }}"
+    state: present
+  with_items: "{{ apt_keys }}"
+  become: true
+
+- name: Add APT Repositories
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+  with_items: "{{ apt_repositories }}"
+  become: true
+
+- name: Add Flatpak Repositories
+  flatpak_remote:
+    name: "{{ item.name }}"
+    flatpakrepo_url: "{{ item.repo }}"
+    state: present
+  with_items: "{{ flatpak_repositories }}"
+  become: true
+
+- name: Install Packages
+  package:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+  with_items: "{{ native_packages }}"
+  become: true
+
+- name: Install Snaps
+  snap:
+    name: "{{ item }}"
+    classic: true
+  with_items: "{{ snaps_to_install }}"
+  become: true
+
+- name: Install Flatpaks
+  flatpak:
+    name: "{{ item }}"
+  with_items: "{{ flatpak_packages }}"
+  become: true
+
+- name: Install Pip Packages
+  pip:
+    name: "{{ item }}"
+  with_items: "{{ pip_packages }}"

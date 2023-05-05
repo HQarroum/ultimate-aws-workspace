@@ -1,0 +1,30 @@
+---
+
+- name: Verify whether an NVIDIA graphics card is available (Linux)
+  shell: lspci | grep -i nvidia
+  become: true
+  register: lspci
+  changed_when: false
+  failed_when: false
+  when: ansible_system == 'Linux'
+
+- name: Save whether an NVIDIA GPU is detected (Linux)
+  set_fact:
+    gpu_present: "{{ True if lspci.rc == 0 else False }}"
+    nvidia_gpu_present: "{{ True if lspci.rc == 0 else False }}"
+  become: true
+  changed_when: false
+  when: ansible_system == 'Linux'
+
+- name: Verify whether an NVIDIA graphics card is available (Windows)
+  win_shell: "{{ ansible_user_dir }}\\{{ lspci_directory_name }}\\lspci | select-string NVIDIA"
+  register: lspci_output
+  when: ansible_os_family == 'Windows'
+  changed_when: false
+
+- name: Save whether an NVIDIA GPU is detected (Windows)
+  set_fact:
+    gpu_present: "{{ True if lspci_output.stdout | length > 0 else False }}"
+    nvidia_gpu_present: "{{ True if lspci_output.stdout | length > 0 else False }}"
+  changed_when: false
+  when: ansible_os_family == 'Windows'

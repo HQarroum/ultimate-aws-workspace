@@ -1,0 +1,66 @@
+---
+
+# This section will download the AMD drivers locally from an AWS
+# managed S3 bucket, the deployment machine must have valid AWS credentials
+# and have the botocore and boto3 libraries installed to download the drivers.
+
+- name: Verify whether AMD Drivers are installed
+  win_shell: pnputil /enum-drivers | select-string 'AMD'
+  register: amd_enum_drivers_output
+  changed_when: false
+
+- name: Save whether AMD Drivers are installed
+  set_fact:
+    amd_driver_installed: "{{ True if amd_enum_drivers_output.stdout | length > 0 else False }}"
+
+# AMD Drivers Installation Block.
+- block:
+
+  - name: Create a local temporary directory
+    tempfile:
+      state: directory
+      suffix: drivers
+    register: amd_local_drivers_directory
+    run_once: true
+    delegate_to: localhost
+
+  - name: List AMD Drivers
+    amazon.aws.aws_s3:
+      bucket: "{{ amd_bucket }}"
+      prefix : "{{ amd_bucket_prefix }}"
+      mode: list
+    delegate_to: localhost
+    run_once: true
+    register: amd_drivers_bucket_keys
+
+  - name: Download AMD Drivers
+    amazon.aws.s3_object:
+      bucket: "{{ amd_bucket }}"
+      object: "{{ amd_drivers_bucket_keys.s3_keys[0] }}"
+      dest: "{{ [amd_local_drivers_directory.path, amd_install_file] | path_join }}"
+      region: "{{ amd_bucket_region }}"
+      mode: get
+    delegate_to: localhost
+    run_once: true
+
+  - name: Upload AMD Drivers
+    win_copy:
+      src: "{{ [amd_local_drivers_directory.path, amd_install_file] | path_join }}"
+      dest: "{{ ansible_user_dir }}"
+    register: amd_driver_upload
+
+  - name: Unzip AMD Drivers
+    win_unzip:
+      src: "{{ [ansible_user_dir, amd_install_file] | path_join }}"
+      dest: "{{ ansible_user_dir }}"
+      creates: "{{ [ansible_user_dir, amd_drivers_directory] | path_join }}"
+
+  - name: Install AMD Drivers
+    win_command: "pnputil /add-driver {{ [ansible_user_dir, amd_drivers_directory, 'Drivers', 'Display', 'WT6A_INF'] | path_join }}\\*.inf /install"
+    failed_when: false
+
+  - name: Reboot
+    win_reboot:
+      reboot_timeout: 1800
+  
+  when: not amd_driver_installed

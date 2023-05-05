@@ -1,0 +1,35 @@
+---
+
+- name: Upload cloud.cfg
+  copy:
+    src: 'files/cloud.{{ ansible_distribution }}.cfg'
+    dest: /etc/cloud/cloud.cfg
+    mode: 0644
+  become: true
+
+- name: Verify whether a password has been set
+  stat:
+    path: '{{ ansible_env.HOME }}/.password'
+  register: password_file
+
+- name: Create a new password
+  set_fact:
+    password: "{{ lookup('ansible.builtin.password', '/dev/null', length=15) }}"
+  when: not password_file.stat.exists
+
+- name: Store the password in the user directory
+  copy:
+    dest: '{{ ansible_env.HOME }}/.password'
+    content: '{{ password }}'
+    mode: 0700
+  when: not password_file.stat.exists
+
+- name: Set the user password
+  user:
+    name: '{{ user }}'
+    state: present
+    update_password: always
+    create_home: false
+    password: "{{ password | password_hash('sha512') }}"
+  become: true
+  when: not password_file.stat.exists

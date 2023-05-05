@@ -1,0 +1,25 @@
+---
+
+# Add EPEL package to the distribution
+# to access extended packages.
+- name: Install EPEL package
+  package:
+    name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm"
+    state: present
+    update_cache: true
+    use: dnf
+    disable_gpg_check: true
+  become: true
+
+- name: Enable RHEL CodeReady Builder package
+  shell: subscription-manager repos --enable codeready-builder-for-rhel-9-$(uname -i)-rpms
+  become: true
+
+- name: Install Core Packages
+  package:
+    name: "{{ item }}"
+    state: present
+    use: dnf
+    update_cache: true
+  with_items: "{{ package_prerequisites }}"
+  become: true

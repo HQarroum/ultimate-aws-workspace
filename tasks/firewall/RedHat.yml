@@ -1,0 +1,22 @@
+---
+
+- name: Install firewalld
+  package:
+    name: firewalld
+    state: present
+  become: true
+
+# The `firewall` Python package is required
+# by Ansible for interacting with firewalld.
+- name: Install the firewall Python Package
+  pip:
+    name: firewall
+
+- name: Apply Firewall Rules
+  ansible.posix.firewalld:
+    port: "{{ item.port }}"
+    state: "{{ item.state }}"
+    permanent: true
+  with_items: "{{ firewall_rules }}"
+  notify: restart_firewalld
+  become: true

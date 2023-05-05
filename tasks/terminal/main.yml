@@ -1,0 +1,35 @@
+---
+
+- name: Include Linux Terminal Installation
+  include_tasks:
+    file: "Linux.yml"
+  when: ansible_distribution != "Amazon"
+
+- name: Include Linux Terminal Installation
+  include_tasks:
+    file: "Amazon.yml"
+  when: ansible_distribution == "Amazon"
+
+- name: Download the oh-my-zsh installer
+  get_url:
+    url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+    dest: /tmp/install.sh
+    mode: 0755
+
+- name: Install oh-my-zsh
+  command: /tmp/install.sh --unattended
+  args:
+    creates: '{{ ansible_user_dir }}/.oh-my-zsh'
+
+- name: Set the user shell
+  user:
+    name: '{{ user }}'
+    shell: /usr/bin/zsh
+  become: true
+
+- name: Enable ZSH plugins
+  lineinfile:
+    path: '{{ ansible_user_dir }}/.zshrc'
+    search_string: 'plugins=(git)'
+    line: 'plugins=(git nvm)'
+    state: present

@@ -1,0 +1,9 @@
+---
+
+# Installs Docker.
+- name: Include Docker Tasks
+  include_tasks: docker-install/main.yml
+
+# Installs Docker Compose.
+- name: Include Docker Compose Tasks
+  include_tasks: docker-compose-install/main.yml

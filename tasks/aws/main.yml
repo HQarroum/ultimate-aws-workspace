@@ -1,0 +1,39 @@
+---
+
+# Install the AWS CLI v2.
+- name: Include AWS CLI
+  include_tasks:
+    file: awscli/main.yml
+    apply:
+      tags: aws-cli
+  tags:
+    - aws-cli
+  when: ansible_os_family != 'Windows'
+
+# Install the AWS SSM Agent.
+- name: Include AWS SSM Agent
+  include_tasks:
+    file: ssm-agent/main.yml
+    apply:
+      tags: aws-ssm
+  tags:
+    - aws-ssm
+
+# Install the AWS EFS Helper.
+- name: Include AWS EFS Helper
+  include_tasks:
+    file: efs-helper/main.yml
+    apply:
+      tags: efs-helper
+  tags:
+    - efs-helper
+  when: ansible_os_family != 'Windows'
+
+# Install the AWS Copilot CLI.
+- name: Include AWS Copilot CLI
+  include_tasks:
+    file: copilot-cli/main.yml
+    apply:
+      tags: copilot-cli
+  tags:
+    - copilot-cli

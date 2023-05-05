@@ -1,0 +1,25 @@
+---
+
+# Adding the APT key of the official Docker repository.
+- name: Add Docker APT key
+  apt_key:
+    url: "{{ docker_gpg_key }}"
+    state: present
+  become: true
+
+# Adding the official Docker repository to the APT repository list.
+- name: Add Docker repository
+  apt_repository:
+    repo: "{{ docker_repository }}"
+    state: present
+    update_cache: true
+  become: true
+
+# Install Docker.
+- name: Install Docker
+  package:
+    name:
+      - "{{ item }}"
+    state: present
+  become: true
+  with_items: "{{ docker_packages }}"

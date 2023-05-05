@@ -1,0 +1,24 @@
+---
+
+# For an unknown reason, Chocolatey can hang eventhough the underlying
+# installation succeeded. For this reason we are setting a timeout for
+# the task and retry a certain amount of times.
+- name: Install Packages
+  win_chocolatey:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ packages_to_install }}"
+  retries: 3
+  delay: 10
+  timeout: 1800
+  notify: reboot_windows
+
+- name: Remove Startup Applications
+  ansible.windows.win_regedit:
+    path: "{{ item.entry }}"
+    name: "{{ item.name }}"
+    state: absent
+  with_items: "{{ startup_applications_to_remove }}"
+
+- name: Flush handlers
+  meta: flush_handlers

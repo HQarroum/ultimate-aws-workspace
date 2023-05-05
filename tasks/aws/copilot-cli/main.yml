@@ -1,0 +1,4 @@
+---
+
+- name: Include AWS Copilot CLI
+  include_tasks: "{{ ansible_system }}.yml"

@@ -1,0 +1,52 @@
+---
+
+- name: Install AMD Installer
+  apt:
+    deb: '{{ amd_installer_url }}'
+  become: true
+
+- name: Install Kernel Extra Modules
+  apt:
+    name: 'linux-modules-extra-{{ ansible_kernel }}'
+    state: present
+  become: true
+
+# For an unknown reason, this task can hang eventhough the underlying
+# command succeeded. For this reason we are setting a timeout for
+# the task and retry a certain amount of times.
+- name: Install AMD Drivers
+  command: amdgpu-install -y --accept-eula --usecase=graphics --no-32
+  become: true
+  register: install_amd_drivers
+  retries: 2
+  delay: 10
+  timeout: 900
+  args:
+    creates: "{{ amd_gpu_driver }}"
+
+# Immediate reboot is required to load the new drivers.
+- name: Reboot
+  reboot:
+    reboot_timeout: 1800
+  become: true
+  when: install_amd_drivers.changed
+
+- name: Create xorg.conf file
+  copy:
+    src: files/xorg/xorg.amd.conf
+    dest: '{{ xorg_conf_path }}'
+    mode: 0755
+  become: true
+
+- name: Add Radeon Profile Repository
+  apt_repository:
+    repo: "{{ radeon_profile_repository }}"
+    state: present
+  become: true
+
+- name: Install Radeon Profile
+  apt:
+    name: radeon-profile
+    state: present
+    update_cache: true
+  become: true

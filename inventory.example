@@ -1,0 +1,43 @@
+[ubuntu]
+# Add your EC2 hostnames here.
+
+[ubuntu:vars]
+ansible_connection=ssh
+ansible_ssh_user=ubuntu
+ansible_ssh_private_key_file=/path/to/private/certificate
+
+[redhat]
+# Add your EC2 hostnames here.
+
+[redhat:vars]
+ansible_connection=ssh
+ansible_ssh_user=ec2-user
+ansible_ssh_private_key_file=/path/to/private/certificate
+
+[debian]
+# Add your EC2 hostnames here.
+
+[debian:vars]
+ansible_connection=ssh
+ansible_ssh_user=admin
+ansible_ssh_private_key_file=/path/to/private/certificate
+
+[windows]
+# Add your EC2 hostnames here.
+
+[windows:vars]
+ansible_connection=winrm
+ansible_user=Administrator
+ansible_password=""
+ansible_winrm_server_cert_validation=ignore
+
+[windows-ssm]
+# Add your instance identifiers here.
+
+[windows-ssm:vars]
+ansible_user="EC2AMAZ-ID"
+ansible_connection=aws_ssm
+ansible_shell_type=powershell
+ansible_aws_ssm_region="eu-west-1"
+ansible_aws_ssm_retries=3
+ansible_aws_ssm_bucket_name="bucket-name"

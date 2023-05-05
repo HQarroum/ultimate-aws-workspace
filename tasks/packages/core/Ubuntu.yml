@@ -1,0 +1,9 @@
+---
+
+- name: Install Core Packages
+  package:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+  with_items: "{{ package_prerequisites }}"
+  become: true

@@ -1,0 +1,20 @@
+---
+
+- name: Enable firewall for all profiles
+  win_firewall:
+    profiles:
+      - Domain
+      - Private
+      - Public
+    state: enabled
+
+- name: Apply Firewall Rules
+  win_firewall_rule:
+    name: "{{ item.name }}"
+    localport: "{{ item.localport }}"
+    action: "{{ item.action }}"
+    direction: "{{ item.direction }}"
+    protocol: "{{ item.protocol }}"
+    state: present
+    enabled: true
+  with_items: "{{ firewall_rules }}"

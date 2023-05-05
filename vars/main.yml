@@ -1,0 +1,7 @@
+---
+
+# NiceDCV.
+nicedcv_gpg_key: https://d1uj6qtbmh3dt5.cloudfront.net/NICE-GPG-KEY
+
+# AWS CLI.
+aws_cli_url: "https://awscli.amazonaws.com/awscli-exe-linux-{{ architecture }}.zip"

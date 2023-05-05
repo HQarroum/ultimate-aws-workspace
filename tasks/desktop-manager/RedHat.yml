@@ -1,0 +1,66 @@
+---
+
+- include_vars: 'Gnome.yml'
+
+- name: Install workstation packages
+  dnf:
+    name: '@workstation'
+    state: present
+  become: true
+  register: workstation_packages
+
+- name: Set GUI as default
+  command: systemctl set-default graphical.target
+  become: true
+  when: workstation_packages.changed
+
+- name: Start GUI
+  command: systemctl isolate graphical
+  become: true
+  when: workstation_packages.changed
+
+- name: Copy GDM configuration file
+  copy:
+    src: files/custom.conf
+    dest: /etc/gdm/custom.conf
+    mode: 0755
+  become: true
+  register: gdm_config
+
+- name: Verify whether Xorg.conf exists
+  stat:
+    path: '{{ xorg_conf_path }}'
+  register: xorg_conf
+
+- name: Copy the default Xorg.conf file
+  copy:
+    src: files/xorg/xorg.dummy.conf
+    dest: '{{ xorg_conf_path }}'
+    mode: 0755
+  become: true
+  when: not xorg_conf.stat.exists
+
+- name: Start GDM
+  service:
+    name: gdm
+    state: started
+    enabled: true
+  become: true
+
+- name: Synchronize the Wallpapers
+  synchronize:
+    src: files/wallpapers/
+    dest: '{{ ansible_env.HOME }}/Pictures/'
+  register: wallpaper_sync
+
+# `psutil` is required for interacting with dconf.
+- name: Install psutil
+  pip:
+    name: psutil
+
+- name: Apply Gnome preferences
+  dconf:
+    key: "{{ item.key }}"
+    value: "{{ item.value | to_json if item.type == 'string' else item.value }}"
+    state: present
+  with_items: '{{ gnome_preferences }}'

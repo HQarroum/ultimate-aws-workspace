@@ -1,0 +1,13 @@
+---
+
+- name: Detect NVIDIA GPU
+  include_tasks:
+    file: ./pci-detect/main.yml
+
+- name: Include Nvidia Tasks
+  include_tasks: "{{ ansible_distribution }}.yml"
+  when: ansible_os_family != 'Windows' and nvidia_gpu_present
+
+- name: Include Nvidia Tasks
+  include_tasks: Windows.yml
+  when: ansible_os_family == 'Windows' and nvidia_gpu_present

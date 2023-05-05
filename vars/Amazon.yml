@@ -1,0 +1,164 @@
+---
+
+# The default user.
+user: ec2-user
+
+# The name of the distribution.
+distribution_name: "el7"
+
+# A list of native packages to install
+# before installing the distribution packages.
+# These packages are pre-requisites and should not
+# be modified.
+package_prerequisites:
+  - gnupg2
+  - rsync
+  - git
+  - curl
+  - wget
+  - zip
+  - unzip
+  - dkms
+  - python-pip
+  - python3-pip
+  - acpid
+  - pkgconfig
+  - binutils
+  - gcc
+  - gcc-c++
+  - kernel-devel
+  - make
+  - yum-utils
+  - '@Development tools'
+
+# Native packages to install.
+native_packages:
+  - mosh
+  - tmux
+  - socat
+  - glx-utils
+  - vim
+  - jq
+  - gparted
+  - tailscale
+  - htop
+  - nfs-utils
+
+# Packages installed using the `amazon-linux-extras` tool.
+amazon_linux_extras_packages:
+  - java-openjdk11
+
+# Packages to install Gnome on Amazon Linux 1.
+gnome_packages:
+  - gdm
+  - gnome-session
+  - gnome-classic-session
+  - gnome-session-xsession
+  - xorg-x11-server-Xorg
+  - xorg-x11-fonts-Type1
+  - xorg-x11-drivers
+  - gnome-terminal
+  - gnu-free-fonts-common
+  - gnu-free-mono-fonts
+  - gnu-free-sans-fonts
+  - gnu-free-serif-fonts
+
+# Override the list of Flatpak packages as Amazon Linux
+# does not come with the latest version of Flatpak and some
+# packages require a more recent version of Flatpak.
+flatpak_packages:
+  - org.mozilla.firefox
+  - com.discordapp.Discord
+  - com.spotify.Client
+  - org.videolan.VLC
+  - io.github.mimbrero.WhatsAppDesktop
+  - com.github.IsmaelMartinez.teams_for_linux
+  - com.getpostman.Postman
+  - com.jetbrains.IntelliJ-IDEA-Ultimate
+  - org.gnome.GHex
+  - com.slack.Slack
+  - com.authy.Authy
+  - com.jgraph.drawio.desktop
+  - com.jetbrains.DataGrip
+  - org.gnu.emacs
+  - com.google.AndroidStudio
+  - com.redis.RedisInsight
+  - io.github.shiftey.Desktop
+  - org.gnome.Snapshot
+  - io.beekeeperstudio.Studio
+
+# Python packages.
+pip_packages:
+  - sshuttle
+  #- pgcli
+  #- thefuck
+
+# Firewall.
+firewall_rules:
+  - port: 22/tcp
+    state: enabled
+  - port: 8443/tcp
+    state: enabled
+  - port: 8443/udp
+    state: enabled
+
+# Yum repositories.
+repositories:
+  - name: tailscale
+    description: "The Tailscale repository"
+    baseurl: "https://pkgs.tailscale.com/stable/amazon-linux/{{ ansible_distribution_major_version }}/$basearch"
+    gpgcheck: 0
+    gpgkey: "https://pkgs.tailscale.com/stable/amazon-linux/{{ ansible_distribution_major_version }}/repo.gpg"
+    repo_gpgcheck: 1
+
+# NiceDCV.
+nicedcv_major_version: "2023.0"
+nicedcv_package_version: "15022"
+nicedcv_gl_version: "1027"
+nicedcv_folder_name: "nice-dcv-{{ nicedcv_major_version }}-{{ nicedcv_package_version }}-{{ distribution_name }}-{{ architecture }}"
+nicedcv_package_url: "https://d1uj6qtbmh3dt5.cloudfront.net/{{ nicedcv_major_version }}/Servers/{{ nicedcv_folder_name }}.tgz"
+nicedcv_server_package: "nice-dcv-server-{{ nicedcv_major_version }}.{{ nicedcv_package_version }}-1.{{ distribution_name }}.{{ architecture }}.rpm"
+nicedcv_web_viewer_package: "nice-dcv-web-viewer-{{ nicedcv_major_version }}.{{ nicedcv_package_version }}-1.{{ distribution_name }}.{{ architecture }}.rpm"
+nicedcv_gl_package: "nice-dcv-gl-{{ nicedcv_major_version }}.{{ nicedcv_gl_version }}-1.{{ distribution_name }}.{{ architecture }}.rpm"
+
+# Nvidia.
+nvidia_bucket: 'ec2-linux-nvidia-drivers'
+nvidia_bucket_prefix: 'latest'
+nvidia_install_file: 'NVIDIA-Linux-x86_64-525.105.17-grid-aws.run'
+nvidia_bucket_region: 'us-east-1'
+
+# AMD.
+amd_bucket: 'ec2-amd-linux-drivers'
+amd_bucket_prefix: 'latest'
+amd_driver_identifier: 'amdgpu-pro-20.20-1184451-rhel-7.8'
+amd_driver_object: '{{ amd_driver_identifier }}.tar.xz'
+amd_bucket_region: 'us-east-1'
+
+# Docker.
+docker_gpg_key: "https://download.docker.com/linux/centos/gpg"
+docker_repository: "https://download.docker.com/linux/centos/docker-ce.repo"
+
+# Node.js.
+# The GLIBC version required by node 17+ is 2.27,
+# which is not available on Amazon Linux 2.
+node_version: 'v16.20.0'
+
+# Map between the Ansible architecture name and the
+# architecture name associated with the AWS SSM package.
+aws_ssm_architecture_map:
+  x86_64:
+    value: amd64
+  amd64:
+    value: amd64
+  armv6l:
+    value: arm
+  armv7l:
+    value: arm
+  arm64:
+    value: arm
+  aarch64:
+    value: arm
+  i386:
+    value: "386"
+  i686:
+    value: "386"

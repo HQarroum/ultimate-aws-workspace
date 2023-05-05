@@ -1,0 +1,7 @@
+ansible
+ansible-lint
+molecule-docker
+molecule-vagrant
+docker
+pywinrm
+yamllint

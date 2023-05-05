@@ -1,0 +1,22 @@
+---
+
+# Installing the AWS SSM Agent.
+- name: Install the AWS SSM Agent (Windows)
+  win_package:
+    path: https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/windows_{{ aws_ssm_arch_name }}/AmazonSSMAgentSetup.exe
+    product_id: amazon-ssm-agent
+    arguments: "{{ aws_ssm_installer_arguments }}"
+    creates_path: "{{ aws_ssm_path }}"
+    state: present
+
+# Registers the AWS SSM Agent as a service and starts it.
+- name: Register AWS SSM Agent as a service (Windows)
+  win_service:
+    name: "{{ aws_ssm_agent_service_name }}"
+    path: "{{ aws_ssm_path }}"
+    description: A service for running the AWS SSM Agent.
+    start_mode: auto
+    state: started
+    failure_actions:
+      - delay_ms: 5000
+        type: restart

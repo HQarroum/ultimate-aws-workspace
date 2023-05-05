@@ -1,0 +1,25 @@
+---
+
+- name: Check whether chocolatey is installed
+  win_stat:
+    path: "{{ chocolatey_path }}/choco.exe"
+  register: chocolatey_exe
+
+- name: Install Chocolatey
+  raw: "$env:chocolateyUseWindowsCompression='false'; \
+  [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; \
+  iex ((New-Object System.Net.WebClient).DownloadString('{{ chocolatey_installer }}'))"
+  when: not chocolatey_exe.stat.exists
+
+- name: Add chocolatey to path
+  win_path:
+    name: PATH
+    elements: '%ALLUSERSPROFILE%\chocolatey\bin'
+    scope: machine
+    state: present
+  when: not chocolatey_exe.stat.exists
+
+- name: Use the default Chocolatey source
+  win_chocolatey_source:
+    name: chocolatey
+    state: present

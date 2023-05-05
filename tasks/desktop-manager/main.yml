@@ -1,0 +1,9 @@
+---
+
+- name: Include Desktop Manager Tasks
+  include_tasks: "{{ ansible_distribution }}.yml"
+  when: ansible_os_family != 'Windows'
+
+- name: Include Desktop Manager Tasks
+  include_tasks: Windows.yml
+  when: ansible_os_family == 'Windows'

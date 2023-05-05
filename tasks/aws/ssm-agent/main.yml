@@ -1,0 +1,20 @@
+---
+
+# Verifying whether the current architecture is supported.
+- name: Verify whether the current architecture is supported.
+  fail:
+    msg: >
+      The current architecture '{{ ansible_architecture }}' is not supported
+      by the AWS SSM Agent on the current operating system. Please refer to the
+      https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-manual-agent-install.html
+      page for more information on supported architectures.
+  when: "ansible_architecture not in aws_ssm_architecture_map | list"
+
+# Saving the architecture name.
+- name: Save the architecture name
+  set_fact:
+    aws_ssm_arch_name: "{{ aws_ssm_architecture_map[ansible_architecture].value }}"
+
+# Install the agent given the operating-system.
+- name: Include SSM Installer
+  include_tasks: "{{ ansible_os_family }}.yml"

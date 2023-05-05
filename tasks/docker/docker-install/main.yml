@@ -1,0 +1,57 @@
+---
+
+# Creates a `docker` group on the host.
+- name: Creates a Docker group
+  group:
+    name: docker
+    state: present
+  become: true
+
+# Creates a `docker` user on the host.
+- name: Creates a Docker user
+  user:
+    name: docker
+    groups: docker
+    append: true
+    state: present
+  become: true
+
+# Including the role task.
+- name: Include the OS-specific task.
+  include_tasks: "{{ ansible_os_family }}.yml"
+
+# Create the Docker configuration directory.
+- name: Ensure /etc/docker/ directory exists
+  file:
+    path: /etc/docker
+    state: directory
+    mode: 0755
+  become: true
+
+# Upload Docker options.
+- name: Configure Docker daemon options
+  copy:
+    content: "{{ docker_daemon_options | to_nice_json }}"
+    dest: /etc/docker/daemon.json
+    mode: 0644
+  become: true
+  when: docker_daemon_options.keys() | length > 0
+  notify: Restart Docker
+
+# Configure systemd if needed.
+- name: Start Docker as a service
+  service:
+    name: docker
+    state: started
+    enabled: true
+    daemon_reload: true
+  become: true
+
+# Adding the specified users to the Docker group.
+- name: Add users to the Docker group
+  user:
+    name: "{{ item }}"
+    groups: docker
+    append: true
+  with_items: "{{ docker_users }}"
+  become: true

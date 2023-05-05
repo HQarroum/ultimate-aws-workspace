@@ -1,0 +1,110 @@
+---
+
+- name: Install NiceDCV Prerequisites
+  package:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - dkms
+    - pulseaudio-utils
+  become: true
+  register: nicedcv_dependencies
+
+- name: Create storage root folder
+  file:
+    path: "{{ ansible_user_dir }}/.dcv-storage"
+    state: directory
+
+- name: Add NiceDCV GPG key
+  rpm_key:
+    key: "{{ nicedcv_gpg_key }}"
+    state: present
+  become: true
+
+- name: Download the NiceDCV packages
+  get_url:
+    url: "{{ nicedcv_package_url }}"
+    dest: /tmp/nice-dcv.tgz
+    mode: 0644
+
+- name: Deflate the NiceDCV package
+  unarchive:
+    src: /tmp/nice-dcv.tgz
+    dest: /tmp/
+    remote_src: true
+
+- name: Install the NiceDCV package
+  yum:
+    name: "/tmp/{{ nicedcv_folder_name }}/{{ nicedcv_server_package }}"
+    state: present
+  become: true
+
+- name: Add user dcv to the group video
+  user:
+    name: dcv
+    group: video
+  become: true
+
+- name: Install the NiceDCV Web Viewer package
+  yum:
+    name: "/tmp/{{ nicedcv_folder_name }}/{{ nicedcv_web_viewer_package }}"
+    state: present
+  become: true
+
+- name: Install the nice-dcv-gl package
+  yum:
+    name: "/tmp/{{ nicedcv_folder_name }}/{{ nicedcv_gl_package }}"
+    state: present
+  become: true
+  when: architecture == 'x86_64'
+
+- name: Install Xorg Dummy Drivers
+  package:
+    name: xorg-x11-drv-dummy
+    state: present
+  become: true
+
+- name: Copy the NiceDCV configuration file
+  template:
+    src: templates/dcv.conf.j2
+    dest: /etc/dcv/dcv.conf
+    mode: 0644
+  become: true
+  notify: restart_nicedcv
+  register: nicedcv_config
+
+- name: Install USB Drivers
+  shell: yes | dcvusbdriverinstaller
+  become: true
+  failed_when: false
+  when: nicedcv_config.changed
+
+- name: Enable NiceDCV service
+  service:
+    name: dcvserver
+    state: started
+    enabled: true
+  become: true
+
+- name: Stop GDM
+  service:
+    name: gdm
+    state: stopped
+  become: true
+  when: nicedcv_config.changed
+
+- name: Disable DCV Admin
+  command: dcvgladmin disable
+  become: true
+  when: nicedcv_config.changed
+
+- name: Enable DCV Admin
+  command: dcvgladmin enable
+  become: true
+  when: nicedcv_config.changed
+
+- name: Start GDM
+  service:
+    name: gdm
+    state: started
+  become: true

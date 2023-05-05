@@ -1,0 +1,30 @@
+---
+
+- name: Download lspci (Windows)
+  win_get_url:
+    url: "{{ lspci_url }}"
+    dest: "{{ [ansible_user_dir, lspci_archive_name] | path_join }}"
+  when: ansible_os_family == 'Windows'
+
+- name: Deflate lspci (Windows)
+  win_unzip:
+    src: "{{ [ansible_user_dir, lspci_archive_name] | path_join }}"
+    dest: "{{ ansible_user_dir }}"
+    creates: "{{ [ansible_user_dir, lspci_directory_name] | path_join }}"
+  when: ansible_os_family == 'Windows'
+
+# Install Nvidia drivers.
+- name: Include Nvidia
+  include_tasks:
+    file: nvidia/main.yml
+    apply:
+      tags: nvidia
+  tags: nvidia
+
+# Install AMD drivers.
+- name: Include AMD
+  include_tasks:
+    file: amd/main.yml
+    apply:
+      tags: amd
+  tags: amd

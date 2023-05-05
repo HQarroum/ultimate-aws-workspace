@@ -1,0 +1,26 @@
+---
+
+- name: Remove Icons on Desktop
+  ansible.windows.win_powershell:
+    script: Remove-Item C:\Users\*\Desktop\* –Force
+
+- name: Synchronize the Wallpapers
+  win_copy:
+    src: files/wallpapers/
+    dest: "{{ ansible_user_dir }}/Pictures/"
+  register: wallpaper_sync
+
+- name: Setting the Wallpaper
+  win_copy:
+    src: "{{ [ansible_user_dir, 'Pictures', default_wallpaper] | path_join }}"
+    dest: "C:\\ProgramData\\Amazon\\EC2Launch\\wallpaper\\Ec2Wallpaper.jpg"
+    remote_src: true
+
+- name: Applying Desktop Preferences
+  ansible.windows.win_regedit:
+    path: "{{ item.entry }}"
+    name: "{{ item.name }}"
+    type: "{{ item.type }}"
+    data: "{{ item.value }}"
+    state: present
+  with_items: "{{ desktop_manager_entries }}"

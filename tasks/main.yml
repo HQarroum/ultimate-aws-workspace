@@ -1,0 +1,106 @@
+- name: Include OS-specific variables
+  include_vars: "{{ ansible_distribution }}.yml"
+  tags: always
+  when: ansible_os_family != 'Windows'
+
+- name: Include OS-specific variables
+  include_vars: Windows.yml
+  tags: always
+  when: ansible_os_family == 'Windows'
+
+# Install the core packages.
+- name: Include Core Packages
+  include_tasks:
+    file: packages/core/main.yml
+  tags: always
+
+# Install AWS dependencies.
+- name: Include AWS Tasks
+  include_tasks:
+    file: aws/main.yml
+    apply:
+      tags: aws
+  tags:
+    - aws
+    - aws-ssm
+    - aws-cli
+    - efs-helper
+    - copilot-cli
+
+# Install GPU drivers.
+- name: Include GPU Drivers
+  include_tasks:
+    file: gpu/main.yml
+    apply:
+      tags: gpu
+  tags:
+    - gpu
+    - nvidia
+
+# Install the Desktop Manager.
+- name: Include Desktop Manager
+  include_tasks:
+    file: desktop-manager/main.yml
+    apply:
+      tags: desktop-manager
+  tags: desktop-manager
+
+# Install NiceDCV.
+- name: Include NiceDCV
+  include_tasks:
+    file: nicedcv/main.yml
+    apply:
+      tags: nicedcv
+  tags: nicedcv
+
+# Install Distribution Packages.
+- name: Include Distribution Packages
+  include_tasks:
+    file: packages/distribution/main.yml
+    apply:
+      tags: packages
+  tags: packages
+
+# Install Docker.
+- name: Include Docker
+  include_tasks:
+    file: docker/main.yml
+    apply:
+      tags: docker
+  tags: docker
+  when: ansible_os_family != 'Windows'
+
+# Install the terminal and shell.
+- name: Include Terminal
+  include_tasks:
+    file: terminal/main.yml
+    apply:
+      tags: terminal
+  tags: terminal
+  when: ansible_os_family != 'Windows'
+
+# Update the current user attributes.
+- name: Include User
+  include_tasks:
+    file: user/main.yml
+    apply:
+      tags: user
+  tags: user
+  when: ansible_os_family != 'Windows'
+
+# Install Node.js.
+- name: Include Node.js
+  include_tasks:
+    file: nodejs/main.yml
+    apply:
+      tags: nodejs
+  tags: nodejs
+  when: ansible_os_family != 'Windows'
+
+# Configure Firewall.
+- name: Include Firewall
+  include_tasks:
+    file: firewall/main.yml
+    apply:
+      tags: firewall
+  tags: firewall

@@ -1,0 +1,68 @@
+---
+
+- name: Include GNOME variables
+  include_vars: 'Gnome.yml'
+
+- name: Install Ubuntu Desktop
+  apt:
+    name: '{{ item }}'
+    state: present
+  with_items:
+    - ubuntu-desktop
+    - gdm3
+    - mesa-utils
+    - gnome-shell-extensions
+  become: true
+
+- name: Remove unwanted Gnome packages
+  apt:
+    name: '{{ item }}'
+    state: absent
+  with_items: '{{ gnome_unwanted_packages }}'
+  become: true
+
+- name: Copy GDM configuration file
+  copy:
+    src: files/custom.conf
+    dest: /etc/gdm3/custom.conf
+    mode: 0755
+  become: true
+  register: gdm_config
+
+- name: Verify whether Xorg.conf exists
+  stat:
+    path: '{{ xorg_conf_path }}'
+  register: xorg_conf
+
+- name: Copy the default Xorg.conf file
+  copy:
+    src: files/xorg/xorg.dummy.conf
+    dest: '{{ xorg_conf_path }}'
+    mode: 0755
+  become: true
+  when: not xorg_conf.stat.exists
+
+- name: Restart GDM3
+  service:
+    name: gdm3
+    state: restarted
+  become: true
+  when: gdm_config.changed
+
+- name: Synchronize the Wallpapers
+  synchronize:
+    src: files/wallpapers/
+    dest: '{{ ansible_user_dir }}/Pictures/'
+  register: wallpaper_sync
+
+# `psutil` is required for interacting with dconf.
+- name: Install psutil
+  pip:
+    name: psutil
+
+- name: Apply Gnome preferences
+  dconf:
+    key: "{{ item.key }}"
+    value: "{{ item.value | to_json if item.type == 'string' else item.value }}"
+    state: present
+  with_items: '{{ gnome_preferences }}'

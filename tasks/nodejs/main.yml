@@ -1,0 +1,25 @@
+---
+
+- name: Detect the current version of Node.js
+  include_tasks:
+    file: ./version-detect/main.yml
+    apply:
+      tags:
+        - nodejs
+  tags: nodejs
+
+- name: Launches the Node.js installation if it is not already installed
+  include_tasks:
+    file: ./install/main.yml
+    apply:
+      tags:
+        - nodejs
+  when: is_node_installed == false
+  tags: nodejs
+
+- name: Install NPM Packages
+  shell: >
+    /bin/bash -c "source {{ ansible_user_dir }}/.nvm/nvm.sh && npm install -g {{ item }}"
+  args:
+    creates: '{{ ansible_user_dir }}/.nvm/versions/node/{{ node_version }}/lib/node_modules/{{ item }}'
+  with_items: '{{ npm_packages }}'

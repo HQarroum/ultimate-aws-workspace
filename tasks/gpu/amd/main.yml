@@ -1,0 +1,13 @@
+---
+
+- name: Detect AMD GPU
+  include_tasks:
+    file: ./pci-detect/main.yml
+
+- name: Include AMD Tasks
+  include_tasks: "{{ ansible_distribution }}.yml"
+  when: ansible_os_family != 'Windows' and amd_gpu_present
+
+- name: Include AMD Tasks
+  include_tasks: Windows.yml
+  when: ansible_os_family == 'Windows' and amd_gpu_present

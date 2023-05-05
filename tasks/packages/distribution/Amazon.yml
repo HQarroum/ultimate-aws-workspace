@@ -1,0 +1,45 @@
+---
+
+- name: Add Repositories
+  yum_repository:
+    name: "{{ item.name }}"
+    description: "{{ item.description }}"
+    baseurl: "{{ item.baseurl }}"
+    gpgcheck: "{{ item.gpgcheck }}"
+    gpgkey: "{{ item.gpgkey }}"
+    repo_gpgcheck: "{{ item.repo_gpgcheck }}"
+  with_items: "{{ repositories }}"
+  become: true
+
+- name: Add Flatpak Repositories
+  flatpak_remote:
+    name: "{{ item.name }}"
+    flatpakrepo_url: "{{ item.repo }}"
+    state: present
+  with_items: "{{ flatpak_repositories }}"
+  become: true
+
+- name: Install Packages
+  package:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+  with_items: "{{ native_packages }}"
+  become: true
+
+- name: Install Amazon Linux Extras Packages
+  command:
+    cmd: "amazon-linux-extras install -y {{ item }}"
+  with_items: "{{ amazon_linux_extras_packages }}"
+  become: true
+
+- name: Install Flatpaks
+  flatpak:
+    name: "{{ item }}"
+  with_items: "{{ flatpak_packages }}"
+  become: true
+
+- name: Install Pip Packages
+  pip:
+    name: "{{ item }}"
+  with_items: "{{ pip_packages }}"

@@ -1,0 +1,31 @@
+---
+
+- name: Check if Node.js is already installed
+  shell: >
+    /bin/bash -c "source {{ ansible_env.HOME }}/.nvm/nvm.sh && nvm which default"
+  register: node_location
+  ignore_errors: true
+  changed_when: false
+  failed_when: false
+
+- name: Retrieve the version of the current Node.js installation
+  command: >
+    {{ node_location.stdout }} -v
+  register: node_current_version
+  when: node_location.rc == 0
+  changed_when: false
+  failed_when: false
+
+- name: Save Node.js version
+  set_fact:
+    node_current_version: "{{ 'v' + node_current_version.stdout[1:] if node_location.rc == 0 and node_current_version.rc == 0 else 'Not Found' }}"
+
+- name: Check if the current Node.js version matches the expected version
+  set_fact:
+    is_node_installed: "{{ false if node_current_version == 'Not Found' else node_current_version.startswith(node_version) }}"
+  when: node_location.rc == 0
+
+- name: Check if the current Node.js version matches the expected version
+  set_fact:
+    is_node_installed: false
+  when: node_location.rc != 0

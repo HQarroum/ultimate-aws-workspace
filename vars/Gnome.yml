@@ -1,0 +1,58 @@
+---
+
+# Gnome favorites.
+gnome_favorite_apps: [
+  'org.mozilla.firefox.desktop',
+  'org.gnome.Nautilus.desktop',
+  'com.spotify.Client.desktop',
+  'android-studio_android-studio.desktop',
+  'com.google.Chrome.desktop',
+  'code_code.desktop',
+  'org.gnome.Terminal.desktop',
+  'kitty.desktop',
+  'notion-snap_notion-snap.desktop'
+]
+
+# Gnome preferences.
+gnome_preferences:
+  - key: /org/gnome/shell/extensions/dash-to-dock/dock-position
+    value: BOTTOM
+    type: string
+  - key: /org/gnome/shell/extensions/dash-to-dock/extend-height
+    value: 'false'
+    type: boolean
+  - key: /org/gnome/shell/extensions/dash-to-dock/dash-max-icon-size
+    value: '40'
+    type: string
+  - key: /org/gnome/desktop/interface/color-scheme
+    value: prefer-dark
+    type: string
+  - key: /org/gnome/desktop/background/picture-uri
+    value: "file://{{ ansible_user_dir }}/Pictures/{{ default_wallpaper }}"
+    type: string
+  - key: /org/gnome/desktop/background/picture-uri-dark
+    value: "file://{{ ansible_user_dir }}/Pictures/{{ default_wallpaper }}"
+    type: string
+  - key: /org/gnome/shell/favorite-apps
+    value: "{{ gnome_favorite_apps }}"
+    type: string
+
+# Gnome packages to remove.
+gnome_unwanted_packages:
+  - aisleriot
+  - gnome-sudoku
+  - gnome-mines
+  - gnome-mahjongg
+  - gnome-todo
+  - shotwell
+  - simple-scan
+  - rhythmbox
+  - totem
+  - totem-plugins
+  - thunderbird
+  - libreoffice-core
+  - baobab
+  - cheese
+  - file-roller
+  - firefox-esr
+  - yelp

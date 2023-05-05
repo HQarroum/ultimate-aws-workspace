@@ -1,0 +1,51 @@
+---
+
+- name: Install NVIDIA Dependencies
+  package:
+    name: "{{ item }}"
+    state: latest
+    update_cache: true
+  with_items:
+    - libglvnd-glx
+    - libglvnd-opengl
+    - libglvnd-devel
+    - vulkan
+    - nvtop
+    - "kernel-devel-{{ ansible_kernel }}"
+    - "kernel-headers-{{ ansible_kernel }}"
+  become: true
+  register: nvidia_dependencies
+
+- name: Reboot
+  reboot:
+    reboot_timeout: 1800
+  become: true
+  when: nvidia_dependencies.changed
+
+- name: Add NVIDIA package repository
+  shell: dnf config-manager --add-repo http://developer.download.nvidia.com/compute/cuda/repos/rhel9/$(uname -i)/cuda-rhel9.repo
+  become: true
+
+- name: Install NVIDIA Drivers
+  command: dnf module install -y nvidia-driver:latest-dkms
+  become: true
+  register: nvidia_drivers
+
+- name: Reboot
+  reboot:
+    reboot_timeout: 1800
+  become: true
+  when: nvidia_drivers.changed
+
+- name: Create xorg.conf file
+  command: >
+    nvidia-xconfig
+      --enable-all-gpus
+      --allow-empty-initial-configuration
+      --virtual={{ baseline_resolution }}
+  become: true
+  notify:
+    - xorg_conf_changed
+
+- name: Flush handlers
+  meta: flush_handlers

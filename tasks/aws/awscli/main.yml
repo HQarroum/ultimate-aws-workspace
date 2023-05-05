@@ -1,0 +1,38 @@
+---
+
+# Download package.
+- name: Download AWS CLI v2 archive
+  get_url:
+    url: "{{ aws_cli_url }}"
+    dest: /tmp/awscli.zip
+
+# Deflate the AWS CLI installer.
+- name: Deflate the archive
+  unarchive:
+    src: /tmp/awscli.zip
+    dest: /tmp/
+    remote_src: true
+
+# Install the AWS CLI.
+- name: Execute install script
+  command: /tmp/aws/install
+  become: true
+  args:
+    creates: /usr/local/bin/aws
+
+# Install the Sessions Manager Plugin.
+- name: Install Sessions Manager Plugin (Debian)
+  apt:
+    deb: https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_64bit/session-manager-plugin.deb
+    state: present
+  become: true
+  when: ansible_os_family == 'Debian'
+
+# Install the Sessions Manager Plugin.
+- name: Install Sessions Manager Plugin (RedHat)
+  yum:
+    name: https://s3.amazonaws.com/session-manager-downloads/plugin/latest/linux_64bit/session-manager-plugin.rpm
+    disable_gpg_check: true
+    state: present
+  become: true
+  when: ansible_os_family == 'RedHat'

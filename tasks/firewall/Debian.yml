@@ -1,0 +1,29 @@
+---
+
+- name: Install ufw
+  package:
+    name: ufw
+    state: present
+  become: true
+
+- name: Enable ufw and logging
+  ufw:
+    logging: true
+    state: enabled
+  become: true
+
+- name: Configure ufw defaults
+  ufw:
+    direction: "{{ item.direction }}"
+    policy: "{{ item.policy }}"
+  with_items: "{{ firewall_configuration }}"
+  become: true
+
+- name: Apply ufw rules
+  ufw:
+    rule: "{{ item.rule }}"
+    port: "{{ item.port }}"
+    proto: "{{ item.proto }}"
+  with_items: "{{ firewall_rules }}"
+  become: true
+  notify: restart_ufw

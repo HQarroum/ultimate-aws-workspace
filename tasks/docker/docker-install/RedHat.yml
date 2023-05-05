@@ -1,0 +1,37 @@
+---
+
+- name: Add Docker GPG key (Redhat)
+  rpm_key:
+    key: "{{ docker_gpg_key }}"
+    state: present
+  become: true
+
+# Add the Docker repository for yum on RedHat.
+- name: Add Docker repository (Redhat)
+  get_url:
+    url: "{{ docker_repository }}"
+    dest: /etc/yum.repos.d/docker-ce.repo
+    owner: root
+    group: root
+    mode: "0644"
+  become: true
+  when: ansible_distribution != "Amazon"
+
+# Install Docker.
+- name: Install Docker (Redhat)
+  package:
+    name:
+      - "{{ item }}"
+    state: present
+  become: true
+  with_items: "{{ docker_packages }}"
+  when: ansible_distribution != "Amazon"
+
+# Install Docker using `amazon-linux-extras`
+# on Amazon Linux.
+- name: Install Docker (Amazon Linux)
+  command: amazon-linux-extras install -y docker
+  args:
+    creates: /usr/bin/docker
+  when: ansible_distribution == "Amazon"
+  become: true

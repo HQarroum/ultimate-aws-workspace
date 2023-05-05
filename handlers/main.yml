@@ -1,0 +1,90 @@
+---
+
+# Restarts ufw on Debian systems when
+# a configuration has changed.
+- name: Restart ufw
+  service:
+    name: ufw
+    state: restarted
+  become: true
+  listen: restart_ufw
+
+# Restarts Docker.
+- name: Restart Docker
+  service:
+    name: docker
+    state: restarted
+  become: true
+  listen: restart_docker
+
+# Restarts the NiceDCV server.
+- name: Restart NiceDCV
+  service:
+    name: dcvserver
+    state: restarted
+  become: true
+  listen: restart_nicedcv
+
+# Restarts the Gnome Desktop Manager.
+# The name of the service is GDM on RedHat.
+- name: Restart GDM
+  service:
+    name: gdm
+    state: restarted
+  become: true
+  listen: restart_gdm
+
+# Restarts the Gnome Desktop Manager.
+# The name of the service is GDM3 on Debian.
+- name: Restart GDM3
+  service:
+    name: gdm3
+    state: restarted
+  become: true
+  listen: restart_gdm3
+
+# Sets the HardDPMS option to false when an NVIDIA
+# graphics card is used to prevent issues with loss
+# of framerates.
+- name: Set the HardDPMS option to false
+  shell: sed -i '/Driver         "nvidia"/a\ \ \ \ Option         "HardDPMS" "false"' /etc/X11/xorg.conf
+  become: true
+  listen: xorg_conf_changed
+
+# Restarts the firewall agent on RedHat.
+- name: Restart firewalld
+  service:
+    name: firewalld
+    state: restarted
+  become: true
+  listen: restart_firewalld
+
+# Restarts SSM Agent (Linux).
+- name: Restart SSM Agent (Linux)
+  service:
+    name: "{{ aws_ssm_agent_service_name }}"
+    state: restarted
+  listen: restart_aws_ssm_agent
+  become: true
+  when: ansible_system == 'Linux'
+
+# Restarts SSM Agent (Windows).
+- name: Restart SSM Agent (Windows)
+  win_service:
+    name: "{{ aws_ssm_agent_service_name }}"
+    state: restarted
+  listen: restart_aws_ssm_agent
+  when: ansible_os_family == 'Windows'
+
+# Reboot the instance (Linux).
+- name: Reboot (Linux)
+  reboot:
+    reboot_timeout: 1800
+  become: true
+  listen: reboot_linux
+
+# Reboot the instance (Windows).
+- name: Reboot (Windows)
+  win_reboot:
+    reboot_timeout: 1800
+  listen: reboot_windows

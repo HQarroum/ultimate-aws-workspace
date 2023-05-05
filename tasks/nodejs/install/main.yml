@@ -1,0 +1,43 @@
+---
+
+# Creating a remote temporary artifact directory.
+- name: Create a remote temporary artifact directory
+  tempfile:
+    state: directory
+    suffix: artifacts
+  register: temp_directory
+
+- name: Download nvm
+  get_url:
+    url: "https://raw.githubusercontent.com/creationix/nvm/v{{ nvm_version }}/install.sh"
+    dest: "{{ temp_directory.path }}"
+    mode: 0755
+  register: download_nvm_installer
+
+# Installs `nvm`.
+- name: Install nvm
+  command: "bash {{ download_nvm_installer.dest }}"
+  args:
+    creates: "{{ ansible_user_dir }}/.nvm"
+
+# Installs node.js.
+- name: Install node and set version
+  shell: >
+    /bin/bash -c "source {{ ansible_user_dir }}/.nvm/nvm.sh && nvm install {{ node_version }} && nvm alias default {{ node_version }}"
+  register: node_location
+
+# Store the new location of Node.
+- name: Getting the current location of Node
+  shell: >
+    /bin/bash -c "source {{ ansible_user_dir }}/.nvm/nvm.sh && nvm which default"
+  register: node_location
+
+# Create node.js symbolic link globally.
+- name: Create node symbolic link globally
+  copy:
+    src: "{{ node_location.stdout }}"
+    remote_src: true
+    dest: /usr/local/bin/node
+    mode: 0755
+  become: true
+  when: create_global_link

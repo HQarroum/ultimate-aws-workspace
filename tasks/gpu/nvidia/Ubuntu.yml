@@ -1,0 +1,56 @@
+---
+
+- name: Install NVIDIA Dependencies
+  apt:
+    name: "{{ item }}"
+    update_cache: true
+  with_items:
+    - build-essential
+    - libc-dev
+    - libc6-dev
+    - libvulkan1
+    - libglvnd-dev
+    - "linux-headers-{{ ansible_kernel }}"
+  become: true
+
+- name: Download CUDA Keyring
+  get_url:
+    url: "{{ nvidia_keyring_url }}"
+    dest: /tmp/cuda-keyring.deb
+
+- name: Install CUDA Keyring
+  apt:
+    deb: /tmp/cuda-keyring.deb
+    state: present
+  become: true
+
+- name: Install NVIDIA Drivers
+  apt:
+    name: "{{ item }}"
+    update_cache: true
+  with_items:
+    - cuda-drivers
+    - nvtop
+    - libglu1-mesa
+    - libegl1-mesa
+  become: true
+  register: install_nvidia_drivers
+
+- name: Reboot
+  reboot:
+    reboot_timeout: 1800
+  become: true
+  when: install_nvidia_drivers.changed
+
+- name: Create xorg.conf file
+  command: >
+    nvidia-xconfig
+      --enable-all-gpus
+      --allow-empty-initial-configuration
+      --virtual={{ baseline_resolution }}
+  become: true
+  notify:
+    - xorg_conf_changed
+
+- name: Flush handlers
+  meta: flush_handlers

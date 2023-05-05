@@ -1,0 +1,203 @@
+---
+
+# Packages to install.
+packages_to_install:
+  # Browsers.
+  - googlechrome
+  - firefox
+  # Language runtimes.
+  - python3
+  - nodejs
+  - javaruntime
+  # Communication.
+  - slack
+  # Development.
+  - vscode
+  - androidstudio
+  - git
+  - alacritty
+  - awscli
+  - jq
+  - terraform
+  - github-desktop
+  - postman
+  - ngrok
+  - kubernetes-cli
+  # Network.
+  - wireshark
+  - putty
+  - curl
+  - tailscale
+  # Productivity.
+  - notion
+  - oh-my-posh
+  # File management.
+  - winscp
+  - 7zip
+  # Audio and Video.
+  - ffmpeg
+  - vlc
+  # Tools.
+  - powertoys
+  - authy-desktop
+  - microsoft-windows-terminal
+
+# Chocolatey.
+chocolatey_installer: https://chocolatey.org/install.ps1
+chocolatey_path: c:/ProgramData/chocolatey
+
+# NiceDCV.
+nicedcv_msi_name: nice-dcv-server-x64-Release-2023.0-14852.msi
+nicedcv_server_package: "https://d1uj6qtbmh3dt5.cloudfront.net/2023.0/Servers/{{ nicedcv_msi_name }}"
+nicedcv_registry_entries:
+  # Enabled automatic session creation.
+  - entry: "HKU:\\S-1-5-18\\Software\\GSettings\\com\\nicesoftware\\dcv\\session-management\\automatic-console-session"
+    name: owner
+    value: Administrator
+    type: string
+  # Enables QUIC UDP.
+  - entry: "HKU:\\S-1-5-18\\Software\\GSettings\\com\\nicesoftware\\dcv\\connectivity"
+    name: enable-quic-frontend
+    value: 1
+    type: dword
+  # Enables file transfers.
+  - entry: "HKU:\\S-1-5-18\\Software\\GSettings\\com\\nicesoftware\\dcv\\session-management\\automatic-console-session"
+    name: storage-root
+    value: "%home%/dcv-storage/"
+    type: string
+
+# Desktop Manager.
+desktop_manager_entries:
+  - entry: "HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize"
+    name: AppsUseLightTheme
+    value: 0
+    type: dword
+  - entry: "HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize"
+    name: SystemUsesLightTheme
+    value: 0
+    type: dword
+  - entry: "HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Search"
+    name: SearchBoxTaskbarMode
+    value: 0
+    type: dword
+  - entry: "HKCU:\\Control Panel\\Desktop"
+    name: WallPaper
+    value: "C:\\Users\\Administrator\\Pictures\\{{ default_wallpaper }}"
+    type: string
+  - entry: "HKCU:\\Control Panel\\Desktop\\WindowMetrics"
+    name: MinAnimate
+    value: 1
+    type: string
+  - entry: "HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced"
+    name: TaskbarAnimations
+    value: 1
+    type: dword
+  - entry: "HKCU:\\SOFTWARE\\Microsoft\\Windows\\DWM"
+    name: ColorizationColor
+    value: 0xc4e81123
+    type: dword
+  - entry: "HKCU:\\SOFTWARE\\Microsoft\\Windows\\DWM"
+    name: ColorizationAfterglow
+    value: 0xc4e81123
+    type: dword
+  - entry: "HKCU:\\SOFTWARE\\Microsoft\\Windows\\DWM"
+    name: ColorizationBlurBalance
+    value: 1
+    type: dword
+  - entry: "HKCU:\\SOFTWARE\\Microsoft\\Windows\\DWM"
+    name: EnableAeroPeek
+    value: 1
+    type: dword
+  - entry: "HKCU:\\SOFTWARE\\Microsoft\\Windows\\DWM"
+    name: AlwaysHibernateThumbnails
+    value: 1
+    type: dword
+  - entry: "HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"
+    name: DisableThumbnails
+    value: 0
+    type: dword
+  - entry: "HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced"
+    name: ListviewAlphaSelect
+    value: 1
+    type: dword
+  - entry: "HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced"
+    name: ListviewShadow
+    value: 1
+    type: dword
+  - entry: "HKCU:\\Control Panel\\Desktop"
+    name: DragFullWindows
+    value: 1
+    type: string
+  - entry: "HKCU:\\Control Panel\\Desktop"
+    name: FontSmoothing
+    value: 2
+    type: string
+  - entry: "HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced"
+    name: ListviewShadow
+    value: 1
+    type: dword
+  - entry: "HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ThemeManager"
+    name: ThemeActive
+    value: 1
+    type: string
+
+# LSPCI.
+lspci_directory_name: pciutils-3.5.5-win64
+lspci_archive_name: pciutils-3.5.5-win64.zip
+lspci_url: "https://eternallybored.org/misc/pciutils/releases/{{ lspci_archive_name }}"
+
+# Firewall.
+firewall_rules:
+  - name: NiceDCV TCP
+    localport: 8443
+    action: allow
+    direction: in
+    protocol: tcp
+  - name: NiceDCV UDP
+    localport: 8443
+    action: allow
+    direction: in
+    protocol: udp
+
+# NVIDIA.
+nvidia_grid_version: '15.1'
+nvidia_driver_version: '528.24'
+nvidia_bucket: 'ec2-windows-nvidia-drivers'
+nvidia_prefix: '/grid-{{ nvidia_grid_version }}'
+nvidia_install_file: '{{ nvidia_driver_version }}_grid_win10_win11_server2019_server2022_dch_64bit_international_aws-swl.exe'
+nvidia_object: '{{ nvidia_prefix }}/{{ nvidia_install_file }}'
+
+# AMD.
+amd_bucket: 'ec2-amd-windows-drivers'
+amd_bucket_region: 'us-east-1'
+amd_bucket_prefix: 'latest'
+amd_install_file: 'amd-drivers.zip'
+amd_drivers_directory: 'Packages'
+
+# Startup Applications.
+startup_applications_to_remove:
+  - entry: "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Run"
+    name: Spotify
+
+# Map between the Ansible architecture name and the
+# architecture name associated with the AWS SSM package.
+aws_ssm_architecture_map:
+  x86_64:
+    value: amd64
+  amd64:
+    value: amd64
+  '64-bit':
+    value: amd64
+  '64 bits':
+    value: amd64
+
+# AWS SSM installation variables.
+aws_ssm_download_directory: 'c:\windows\temp\AmazonSSMAgentSetup.exe'
+aws_ssm_installer_arguments: '/install /quiet /norestart'
+aws_ssm_path: 'C:\Program Files\Amazon\SSM\amazon-ssm-agent.exe'
+
+# AWS SSM variable overrides.
+aws_ssm_activation_path: 'C:\ProgramData\Amazon\SSM\InstanceData\registration'
+aws_ssm_agent_cli_name: amazon-ssm-agent.exe
+aws_ssm_agent_service_name: AmazonSSMAgent
+aws_ssm_agent_install_directory: 'C:\Program Files\Amazon\SSM\'

@@ -1,0 +1,163 @@
+---
+
+# Map between the Ansible architecture name and the
+# architecture name associated with NiceDCV.
+nicedcv_architecture_map:
+  x86_64:
+    value: x86_64
+  amd64:
+    value: x86_64
+  armv8:
+    value: aarch64
+  arm64:
+    value: aarch64
+  aarch64:
+    value: aarch64
+  '64-bit':
+    value: x86_64
+  '64-bits':
+    value: x86_64
+
+nicedcv_alt_architecture_map:
+  x86_64:
+    value: amd64
+  amd64:
+    value: amd64
+  arm64:
+    value: arm64
+  aarch64:
+    value: arm64
+  '64-bit':
+    value: amd64
+  '64-bits':
+    value: amd64
+
+architecture: "{{ nicedcv_architecture_map[ansible_architecture].value }}"
+alt_architecture: "{{ nicedcv_alt_architecture_map[ansible_architecture].value }}"
+
+# Map between the Ansible architecture name and the
+# architecture name associated with the Docker package.
+docker_architecture_map:
+  x86_64:
+    value: amd64
+  amd64:
+    value: amd64
+  armv6l:
+    value: armhf
+  armv7l:
+    value: armhf
+  arm64:
+    value: arm64
+  aarch64:
+    value: arm64
+
+# Map between the Ansible architecture name and the
+# architecture name associated with the Docker compose package.
+docker_compose_architecture_map:
+  x86_64:
+    value: x86_64
+  amd64:
+    value: x86_64
+  armv6:
+    value: armv6
+  armv7:
+    value: armv7
+  armv6l:
+    value: armv6
+  armv7l:
+    value: armv7
+  arm64:
+    value: aarch64
+  aarch64:
+    value: aarch64
+
+# Snaps to install.
+snaps_to_install:
+  - scrcpy
+  - code
+  - terraform
+  - kubectl
+  - notion-snap-reborn
+  - nmap
+
+# Flatpak repositories.
+flatpak_repositories:
+  - name: flathub
+    repo: https://flathub.org/repo/flathub.flatpakrepo
+
+# Flatpak packages to install.
+flatpak_packages:
+  - com.google.Chrome
+  - org.mozilla.firefox
+  - com.discordapp.Discord
+  - com.spotify.Client
+  - org.videolan.VLC
+  - com.brave.Browser
+  - io.github.mimbrero.WhatsAppDesktop
+  - com.github.IsmaelMartinez.teams_for_linux
+  - com.getpostman.Postman
+  - com.jetbrains.IntelliJ-IDEA-Community
+  - org.gnome.GHex
+  - com.slack.Slack
+  - com.authy.Authy
+  - com.jgraph.drawio.desktop
+  - com.jetbrains.DataGrip
+  - org.gnu.emacs
+  - com.google.AndroidStudio
+  - com.redis.RedisInsight
+  - io.github.shiftey.Desktop
+  - org.eclipse.Java
+  - org.gnome.Snapshot
+  - io.beekeeperstudio.Studio
+
+# NPM Packages to install globally.
+npm_packages:
+  - tldr
+  - how2
+  - fkill-cli
+  - typescript
+  - aws-cdk
+  - ngrok
+
+# Python packages.
+pip_packages:
+  - sshuttle
+  - pgcli
+  - thefuck
+
+# Docker.
+docker_packages:
+  - docker-ce
+  - docker-ce-cli
+  - containerd.io
+
+# Docker options.
+docker_daemon_options: {}
+
+# A list of users who will be added to the docker group.
+docker_users:
+  - "{{ user }}"
+
+# Docker Compose options.
+docker_compose_version: 2.1.1
+docker_compose_path: "/usr/local/bin/docker-compose"
+docker_compose_url:
+  "https://github.com/docker/compose/releases/download/v{{ docker_compose_version }}/docker-compose-linux-{{ docker_compose_architecture_map[ansible_architecture].value }}"
+
+# Node.js.
+node_version: 'v18.15.0'
+nvm_version: '0.39.3'
+create_global_link: true
+
+# X Server.
+baseline_resolution: '2560x1440'
+
+# Wallpaper.
+default_wallpaper: 'canyon.jpg'
+
+# AWS SSM Agent.
+aws_ssm_agent_service_name: amazon-ssm-agent
+aws_ssm_agent_cli_name: amazon-ssm-agent
+
+# X Server.
+xorg_conf_path: /etc/X11/xorg.conf

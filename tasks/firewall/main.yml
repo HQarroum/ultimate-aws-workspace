@@ -1,0 +1,4 @@
+---
+
+- name: Include Firewall Tasks
+  include_tasks: "{{ ansible_os_family }}.yml"
