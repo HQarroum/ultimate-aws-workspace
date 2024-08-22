@@ -35,7 +35,6 @@ native_packages:
   - socat
   - build-essential
   - vim
-  - openjdk-11-jdk
   - jq
   - exa
   - fzf
@@ -44,27 +43,23 @@ native_packages:
   - ffmpeg
   - mplayer
   - gparted
-  - tailscale
   - httpie
   - bat
   - nfs-common
 
-signing_keys:
-  - url: "{{ tailscale_apt_signkey }}"
-    dest: "{{ tailscale_apt_keyring_path }}"
+signing_keys: []
 
 apt_keys:
   - https://dl.google.com/linux/linux_signing_key.pub
 
 apt_repositories:
-  - "{{ tailscale_apt_deb }}"
   - ppa:flatpak/stable
 
 # NiceDCV.
-nicedcv_major_version: "2023.0"
-nicedcv_package_version: "15022"
-nicedcv_gl_version: "1027"
-nicedcv_xdcv_version: "547"
+nicedcv_major_version: "2023.1"
+nicedcv_package_version: "16388"
+nicedcv_gl_version: "1047"
+nicedcv_xdcv_version: "565"
 nicedcv_folder_name: "nice-dcv-{{ nicedcv_major_version }}-{{ nicedcv_package_version }}-{{ distribution_name }}-{{ architecture }}"
 nicedcv_package_url: "https://d1uj6qtbmh3dt5.cloudfront.net/{{ nicedcv_major_version }}/Servers/{{ nicedcv_folder_name }}.tgz"
 nicedcv_server_package: "nice-dcv-server_{{ nicedcv_major_version }}.{{ nicedcv_package_version }}-1_{{ alt_architecture }}.{{ distribution_name }}.deb"
@@ -72,16 +67,11 @@ nicedcv_web_viewer_package: "nice-dcv-web-viewer_{{ nicedcv_major_version }}.{{ 
 nicedcv_gl_package: "nice-dcv-gl_{{ nicedcv_major_version }}.{{ nicedcv_gl_version }}-1_{{ alt_architecture }}.{{ distribution_name }}.deb"
 nicedcv_xdcv_package: "nice-xdcv_{{ nicedcv_major_version }}.{{ nicedcv_xdcv_version }}-1_{{ alt_architecture }}.{{ distribution_name }}.deb"
 
-# Tailscale.
-tailscale_apt_signkey: https://pkgs.tailscale.com/stable/ubuntu/{{ ansible_distribution_release | lower }}.noarmor.gpg
-tailscale_apt_keyring_path: /usr/share/keyrings/tailscale-archive-keyring.gpg
-tailscale_apt_deb: deb [signed-by={{ tailscale_apt_keyring_path }}] https://pkgs.tailscale.com/stable/ubuntu {{ ansible_distribution_release | lower }} main
-
 # Nvidia.
-nvidia_keyring_url: "https://developer.download.nvidia.com/compute/cuda/repos/{{ distribution_name }}/{{ architecture }}/cuda-keyring_1.0-1_all.deb"
+nvidia_keyring_url: "https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/{{ ansible_architecture }}/cuda-keyring_1.0-1_all.deb"
 
 # AMD.
-amd_installer_url: "https://repo.radeon.com/amdgpu-install/5.4.5/ubuntu/jammy/amdgpu-install_5.4.50405-1_all.deb"
+amd_installer_url: "https://repo.radeon.com/amdgpu-install/6.2/ubuntu/{{ ansible_distribution_release }}/amdgpu-install_6.2.60200-1_all.deb"
 amd_gpu_driver: "/opt/amdgpu/lib/xorg/modules/drivers/amdgpu_drv.so"
 radeon_profile_repository: "ppa:radeon-profile/stable"
 
@@ -91,7 +81,6 @@ firewall_configuration:
     policy: deny
   - direction: outgoing
     policy: allow
-
 firewall_rules:
   - rule: allow
     port: 22

@@ -71,15 +71,6 @@ docker_compose_architecture_map:
   aarch64:
     value: aarch64
 
-# Snaps to install.
-snaps_to_install:
-  - scrcpy
-  - code
-  - terraform
-  - kubectl
-  - notion-snap-reborn
-  - nmap
-
 # Flatpak repositories.
 flatpak_repositories:
   - name: flathub
@@ -90,25 +81,17 @@ flatpak_packages:
   - com.google.Chrome
   - org.mozilla.firefox
   - com.discordapp.Discord
-  - com.spotify.Client
   - org.videolan.VLC
-  - com.brave.Browser
-  - io.github.mimbrero.WhatsAppDesktop
-  - com.github.IsmaelMartinez.teams_for_linux
   - com.getpostman.Postman
-  - com.jetbrains.IntelliJ-IDEA-Community
   - org.gnome.GHex
   - com.slack.Slack
-  - com.authy.Authy
   - com.jgraph.drawio.desktop
   - com.jetbrains.DataGrip
   - org.gnu.emacs
   - com.google.AndroidStudio
   - com.redis.RedisInsight
-  - io.github.shiftey.Desktop
-  - org.eclipse.Java
   - org.gnome.Snapshot
-  - io.beekeeperstudio.Studio
+  - com.visualstudio.code
 
 # NPM Packages to install globally.
 npm_packages:
@@ -139,14 +122,14 @@ docker_users:
   - "{{ user }}"
 
 # Docker Compose options.
-docker_compose_version: 2.1.1
+docker_compose_version: 2.29.1
 docker_compose_path: "/usr/local/bin/docker-compose"
 docker_compose_url:
   "https://github.com/docker/compose/releases/download/v{{ docker_compose_version }}/docker-compose-linux-{{ docker_compose_architecture_map[ansible_architecture].value }}"
 
 # Node.js.
-node_version: 'v18.15.0'
-nvm_version: '0.39.3'
+node_version: 'v20.14.0'
+nvm_version: '0.40.0'
 create_global_link: true
 
 # X Server.

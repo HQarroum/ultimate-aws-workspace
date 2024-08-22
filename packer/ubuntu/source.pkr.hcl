@@ -9,6 +9,7 @@ source "amazon-ebs" "ubuntu-nvidia" {
   region          = var.region
   ssh_username    = var.ami.communicator.username
   ssh_port        = var.ami.communicator.port
+  subnet_id       = var.subnet_id != "" ? var.subnet_id : null
   
   source_ami_filter {
     filters = {
@@ -37,6 +38,7 @@ source "amazon-ebs" "ubuntu-amd" {
   region          = var.region
   ssh_username    = var.ami.communicator.username
   ssh_port        = var.ami.communicator.port
+  subnet_id       = var.subnet_id != "" ? var.subnet_id : null
   
   source_ami_filter {
     filters = {
@@ -65,6 +67,7 @@ source "amazon-ebs" "ubuntu-no-gpu" {
   region          = var.region
   ssh_username    = var.ami.communicator.username
   ssh_port        = var.ami.communicator.port
+  subnet_id       = var.subnet_id != "" ? var.subnet_id : null
   
   source_ami_filter {
     filters = {

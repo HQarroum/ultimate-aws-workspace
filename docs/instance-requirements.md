@@ -45,3 +45,7 @@ Port | Protocol | Operating System | Description
 When you use an EC2 instance, it is recommended that you specify an IAM Role for that instance that has the `AmazonSSMManagedInstanceCore` policy which allows your instance to be managed by AWS SSM.
 
 Furthermore, you will need to allow the instance access to a specific AWS provided S3 bucket for Nice DCV licenses which are included in the EC2 offering. To do so, please follow the [Setting Up License](https://docs.aws.amazon.com/dcv/latest/adminguide/setting-up-license.html#setting-up-license-ec2) page for Nice DCV for ensuring your instance's Nice DCV server is provisioned with an appropriate license.
+
+### Windows WinRM
+
+For Windows instances, when using the ansible role to provision your instance, you need to enable WinRM on the instance. This involves an additional step of connecting via RDP to the instance, and running the [ConfigureRemotingForAnsible.ps1](../assets/ConfigureRemotingForAnsible.ps1) script on the instance to enable the WinRM service.

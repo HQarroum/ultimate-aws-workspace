@@ -10,7 +10,7 @@
 </p>
 <br>
 
-Current version: **1.0.0**
+Current version: **1.1.0**
 
 Lead Maintainer: [Halim Qarroum](mailto:hqm.post@gmail.com)
 
@@ -31,7 +31,7 @@ Lead Maintainer: [Halim Qarroum](mailto:hqm.post@gmail.com)
 - ⚡ **NiceDCV Integration** - Uses QUIC UDP by default for a low latency 60 FPS experience.
 - 🔋 **Battery Included** - Audio + Copy-and-Paste + Microphone + USB devices integration.
 - 🦎 **GPU Support** - Supports NVIDIA and AMD GPU acceleration. ([More Information](./docs/technical-overview.md))
-- 💻 **Cross-Platform** - Supports latest images based on Ubuntu, AL2, RedHat and Windows Server.
+- 💻 **Cross-Platform** - Supports latest images based on Ubuntu, RedHat and Windows Server.
 - 🤖 **Automated Deployments** -  Use [Ansible](https://github.com/ansible/ansible) to deploy, and [Packer](https://www.packer.io/) to create AMIs.
 - 📦 **Modern Package Management** - Packages based on [Flatpak](https://flatpak.org/) on Linux and [Chocolatey](https://chocolatey.org/) on Windows.
 - ☁️ **AWS Integrated** - Integrates with [SSM](https://docs.aws.amazon.com/systems-manager/latest/userguide/ssm-agent.html), [EFS](https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html), [Active Directory](https://docs.aws.amazon.com/directoryservice/latest/admin-guide/what_is.html), [Copilot CLI](https://aws.github.io/copilot-cli/).
@@ -45,14 +45,12 @@ The `ultimate-aws-workspace` project aims to provides a way to quickly kickstart
   <thead>
     <tr>
       <th>Ubuntu</th>
-      <th>AL2 (Beta)</th>
       <th>RedHat</th>
       <th>Windows</th>
     </tr>
   </thead>
   <tr>
     <td><img width="80" src="assets/operating-systems/ubuntu.png" /></td>
-    <td><img width="80" src="assets/operating-systems/amazon-linux.png" /></td>
     <td><img width="80" src="assets/operating-systems/redhat.png" /></td>
     <td><img width="80" src="assets/operating-systems/windows.png" /></td>
   </tr>
@@ -105,7 +103,7 @@ An Ansible role is provided to provision new cloud instances with the necessary 
 
 **What operating systems are supported ?**
 
-> The latest Ubuntu 22.04, Amazon Linux 2 (Beta), RedHat 9 and Windows Server 2022 AWS provided AMIs are currently supported. Amazon Linux 3 is not supported.
+> Ubuntu 22.04, RedHat 9 and Windows Server 2022 AWS provided AMIs are currently supported. Amazon Linux is not supported.
 
 **What CPU architectures are supported ?**
 

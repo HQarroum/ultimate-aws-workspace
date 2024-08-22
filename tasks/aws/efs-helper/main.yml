@@ -1,4 +1,0 @@
----
-
-- name: Include EFS Helper
-  include_tasks: "{{ ansible_os_family }}.yml"

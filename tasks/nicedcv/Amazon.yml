@@ -1,7 +1,0 @@
----
-
-# The Amazon Linux NiceDCV installation is
-# the same as the installation method on RedHat.
-- name: Include NiceDCV RedHat Installer
-  include_tasks:
-    file: "RedHat.yml"

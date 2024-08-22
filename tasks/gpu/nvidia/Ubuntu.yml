@@ -32,9 +32,22 @@
     - cuda-drivers
     - nvtop
     - libglu1-mesa
-    - libegl1-mesa
   become: true
+  async: 900
+  poll: 10
   register: install_nvidia_drivers
+
+- name: Install libegl1-mesa (Ubuntu <24.04)
+  apt:
+    name: libegl1-mesa
+  become: true
+  when: ansible_distribution_version < '24.04'
+
+- name: Install libegl1-mesa (Ubuntu >=24.04)
+  apt:
+    name: libegl1-mesa-dev
+  become: true
+  when: ansible_distribution_version >= '24.04'
 
 - name: Reboot
   reboot:

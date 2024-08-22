@@ -1,5 +1,41 @@
 ---
 
+# Copy the source list file on Ubuntu 22.04.
+- name: Set default source list
+  template:
+    src: 'templates/sources.list.22.04.j2'
+    dest: /etc/apt/sources.list
+    mode: 0644
+  become: true
+  when: ansible_distribution_version == '22.04'
+
+# Copy the source list file on Ubuntu 24.04.
+- name: Set default source list
+  template:
+    src: 'templates/sources.list.24.04.j2'
+    dest: /etc/apt/sources.list.d/ubuntu.sources
+    mode: 0644
+  become: true
+  when: ansible_distribution_version == '24.04'
+
+- name: Update the package cache
+  apt:
+    update_cache: yes
+  become: true
+
+- name: Perform a distribution upgrade
+  apt:
+    upgrade: dist
+    update_cache: yes
+  become: true
+  register: dist_upgrade
+
+- name: Reboot
+  reboot:
+    reboot_timeout: 1800
+  become: true
+  when: dist_upgrade.changed
+
 - name: Install Core Packages
   package:
     name: "{{ item }}"

@@ -21,6 +21,11 @@ variable "instance_type_no_gpu" {
   default     = "m5.xlarge"
 }
 
+variable "subnet_id" {
+  type        = string
+  description = "The subnet ID to use to build your aws AMI"
+}
+
 variable ami {
   type = object({
     prefix            = string

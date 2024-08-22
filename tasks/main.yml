@@ -24,7 +24,6 @@
     - aws
     - aws-ssm
     - aws-cli
-    - efs-helper
     - copilot-cli
 
 # Install GPU drivers.

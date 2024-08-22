@@ -4,6 +4,10 @@ packer {
       version = ">= 1.1.1"
       source  = "github.com/hashicorp/amazon"
     }
+    ansible = {
+      version = ">= 1.1.1"
+      source  = "github.com/hashicorp/ansible"
+    }
   }
 }
 
@@ -14,7 +18,7 @@ build {
   ]
 
   provisioner "ansible" {
-    playbook_file   = "../../playbook.yml"
-    user            = var.ami.communicator.username
+    playbook_file = "../../playbook.yml"
+    user          = var.ami.communicator.username
   }
 }

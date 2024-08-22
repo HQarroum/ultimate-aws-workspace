@@ -7,11 +7,14 @@
   apt:
     name: '{{ item }}'
     state: present
+    update_cache: true
   with_items:
-    - ubuntu-desktop
+    - ubuntu-gnome-desktop
     - gdm3
     - mesa-utils
     - gnome-shell-extensions
+  async: 3600
+  poll: 10
   become: true
 
 - name: Remove unwanted Gnome packages
@@ -19,6 +22,7 @@
     name: '{{ item }}'
     state: absent
   with_items: '{{ gnome_unwanted_packages }}'
+  ignore_errors: yes
   become: true
 
 - name: Copy GDM configuration file
@@ -49,10 +53,18 @@
   become: true
   when: gdm_config.changed
 
+- name: Install rsync
+  package:
+    name: rsync
+    state: present
+  become: true
+  ignore_errors: yes
+
 - name: Synchronize the Wallpapers
   synchronize:
     src: files/wallpapers/
     dest: '{{ ansible_user_dir }}/Pictures/'
+    use_ssh_args: yes
   register: wallpaper_sync
 
 # `psutil` is required for interacting with dconf.

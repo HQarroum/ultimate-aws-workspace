@@ -17,13 +17,6 @@
     password: "{{ lookup('ansible.builtin.password', '/dev/null', length=15) }}"
   when: not password_file.stat.exists
 
-- name: Store the password in the user directory
-  copy:
-    dest: '{{ ansible_env.HOME }}/.password'
-    content: '{{ password }}'
-    mode: 0700
-  when: not password_file.stat.exists
-
 - name: Set the user password
   user:
     name: '{{ user }}'
@@ -32,4 +25,12 @@
     create_home: false
     password: "{{ password | password_hash('sha512') }}"
   become: true
+  register: user_password
   when: not password_file.stat.exists
+
+- name: Store the password in the user directory
+  copy:
+    dest: '{{ ansible_env.HOME }}/.password'
+    content: '{{ password }}'
+    mode: 0700
+  when: user_password.changed

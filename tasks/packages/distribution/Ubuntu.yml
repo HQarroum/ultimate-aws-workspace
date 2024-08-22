@@ -38,13 +38,6 @@
   with_items: "{{ native_packages }}"
   become: true
 
-- name: Install Snaps
-  snap:
-    name: "{{ item }}"
-    classic: true
-  with_items: "{{ snaps_to_install }}"
-  become: true
-
 - name: Install Flatpaks
   flatpak:
     name: "{{ item }}"

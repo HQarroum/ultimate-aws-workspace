@@ -27,6 +27,11 @@ variable "username" {
   default     = "Administrator"
 }
 
+variable "subnet_id" {
+  type        = string
+  description = "The subnet ID to use to build your aws AMI"
+}
+
 variable ami {
   type = object({
     prefix            = string

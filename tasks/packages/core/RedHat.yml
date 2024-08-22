@@ -23,3 +23,12 @@
     update_cache: true
   with_items: "{{ package_prerequisites }}"
   become: true
+
+- name: Uninstall unwanted packages
+  dnf:
+    name: '{{ item }}'
+    state: absent
+  with_items:
+    - chronicled
+  ignore_errors: yes
+  become: true

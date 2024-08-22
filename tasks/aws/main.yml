@@ -19,16 +19,6 @@
   tags:
     - aws-ssm
 
-# Install the AWS EFS Helper.
-- name: Include AWS EFS Helper
-  include_tasks:
-    file: efs-helper/main.yml
-    apply:
-      tags: efs-helper
-  tags:
-    - efs-helper
-  when: ansible_os_family != 'Windows'
-
 # Install the AWS Copilot CLI.
 - name: Include AWS Copilot CLI
   include_tasks:

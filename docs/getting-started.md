@@ -21,10 +21,12 @@ ansible-playbook playbook.yml -i /path/to/inventory
 Packer is the recommended way if you want to create Amazon Machine Images (AMIs) that are pre-built and ready to deploy to your workspace instances. The [packer](../packer) directory contains different build templates for the supported operating systems. For example, to build an Ubuntu AMI, run the following.
 
 ```bash
+# Install the packer plugins.
+packer init .
 # Move to the Ubuntu directory.
 cd ./packer/ubuntu
-# Build the image.
-packer build .
+# Build the image (select a public subnet in which you deploy the instance).
+packer build -var 'subnet_id=subnet-xxxxxx' .
 ```
 
 ## 💻 Accessing the Instance
@@ -38,7 +40,6 @@ On Linux, the deployment creates a randomly generated password for the main user
 Operating System | Main user
 ---------------- | ---------
 Ubuntu 22.04     | `ubuntu`
-Amazon Linux 2   | `ec2-user`
 RedHat 9         | `ec2-user`
 
 You will need to first retrieve the password either by connecting via SSH to the instance, or by using AWS SSM or EC2 Instance Connect from the AWS console for instance using the *Connect* button in the console.
@@ -51,7 +52,7 @@ You will need to first retrieve the password either by connecting via SSH to the
 
 ### Windows
 
-For Windows instances, you simply need to decrypt the password instance using the AWS Console.
+For Windows instances, you need to decrypt the password instance using the AWS Console.
 
 ### NiceDCV Connection
 

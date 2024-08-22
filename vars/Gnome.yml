@@ -4,13 +4,11 @@
 gnome_favorite_apps: [
   'org.mozilla.firefox.desktop',
   'org.gnome.Nautilus.desktop',
-  'com.spotify.Client.desktop',
   'android-studio_android-studio.desktop',
   'com.google.Chrome.desktop',
   'code_code.desktop',
   'org.gnome.Terminal.desktop',
-  'kitty.desktop',
-  'notion-snap_notion-snap.desktop'
+  'kitty.desktop'
 ]
 
 # Gnome preferences.
@@ -35,6 +33,12 @@ gnome_preferences:
     type: string
   - key: /org/gnome/shell/favorite-apps
     value: "{{ gnome_favorite_apps }}"
+    type: string
+  - key: /org/gnome/settings-daemon/plugins/power/sleep-inactive-ac-timeout
+    value: '3600'
+    type: int32
+  - key: /org/gnome/settings-daemon/plugins/power/sleep-inactive-ac-type
+    value: 'shutdown'
     type: string
 
 # Gnome packages to remove.

@@ -8,7 +8,6 @@ packages_to_install:
   # Language runtimes.
   - python3
   - nodejs
-  - javaruntime
   # Communication.
   - slack
   # Development.
@@ -21,15 +20,12 @@ packages_to_install:
   - terraform
   - github-desktop
   - postman
-  - ngrok
   - kubernetes-cli
   # Network.
   - wireshark
   - putty
   - curl
-  - tailscale
   # Productivity.
-  - notion
   - oh-my-posh
   # File management.
   - winscp
@@ -39,7 +35,6 @@ packages_to_install:
   - vlc
   # Tools.
   - powertoys
-  - authy-desktop
   - microsoft-windows-terminal
 
 # Chocolatey.
@@ -47,8 +42,8 @@ chocolatey_installer: https://chocolatey.org/install.ps1
 chocolatey_path: c:/ProgramData/chocolatey
 
 # NiceDCV.
-nicedcv_msi_name: nice-dcv-server-x64-Release-2023.0-14852.msi
-nicedcv_server_package: "https://d1uj6qtbmh3dt5.cloudfront.net/2023.0/Servers/{{ nicedcv_msi_name }}"
+nicedcv_msi_name: nice-dcv-server-x64-Release-2023.1-16388.msi
+nicedcv_server_package: "https://d1uj6qtbmh3dt5.cloudfront.net/2023.1/Servers/{{ nicedcv_msi_name }}"
 nicedcv_registry_entries:
   # Enabled automatic session creation.
   - entry: "HKU:\\S-1-5-18\\Software\\GSettings\\com\\nicesoftware\\dcv\\session-management\\automatic-console-session"
@@ -160,11 +155,11 @@ firewall_rules:
     protocol: udp
 
 # NVIDIA.
-nvidia_grid_version: '15.1'
-nvidia_driver_version: '528.24'
+nvidia_grid_version: '17.3'
+nvidia_driver_version: '552.74'
 nvidia_bucket: 'ec2-windows-nvidia-drivers'
 nvidia_prefix: '/grid-{{ nvidia_grid_version }}'
-nvidia_install_file: '{{ nvidia_driver_version }}_grid_win10_win11_server2019_server2022_dch_64bit_international_aws-swl.exe'
+nvidia_install_file: '{{ nvidia_driver_version }}_grid_win10_win11_server2022_dch_64bit_international_awl_swl.exe'
 nvidia_object: '{{ nvidia_prefix }}/{{ nvidia_install_file }}'
 
 # AMD.
@@ -175,9 +170,7 @@ amd_install_file: 'amd-drivers.zip'
 amd_drivers_directory: 'Packages'
 
 # Startup Applications.
-startup_applications_to_remove:
-  - entry: "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Run"
-    name: Spotify
+startup_applications_to_remove: []
 
 # Map between the Ansible architecture name and the
 # architecture name associated with the AWS SSM package.

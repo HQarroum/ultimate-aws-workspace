@@ -11,27 +11,6 @@
   with_items: "{{ repositories }}"
   become: true
 
-- name: Start snapd
-  service:
-    name: snapd
-    state: started
-    enabled: true
-  become: true
-
-- name: Verify whether the snapd directory exists
-  stat:
-    path: /snap
-  become: true
-  register: snap_link
-
-- name: Create snapd symlink
-  file:
-    src: /var/lib/snapd/snap
-    dest: /snap
-    state: link
-  when: not snap_link.stat.exists
-  become: true
-
 - name: Add Flatpak Repositories
   flatpak_remote:
     name: "{{ item.name }}"
@@ -47,13 +26,6 @@
     update_cache: true
     use: dnf
   with_items: "{{ native_packages }}"
-  become: true
-
-- name: Install Snaps
-  snap:
-    name: "{{ item }}"
-    classic: true
-  with_items: "{{ snaps_to_install }}"
   become: true
 
 - name: Install Flatpaks

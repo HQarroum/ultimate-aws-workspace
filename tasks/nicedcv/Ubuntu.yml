@@ -75,6 +75,7 @@
 - name: Install USB Drivers
   shell: yes | dcvusbdriverinstaller
   become: true
+  ignore_errors: yes
   when: nicedcv_config.changed
 
 - name: Stop GDM3

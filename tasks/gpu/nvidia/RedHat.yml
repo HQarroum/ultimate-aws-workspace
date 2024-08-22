@@ -11,6 +11,11 @@
     - libglvnd-devel
     - vulkan
     - nvtop
+    - pkgconfig
+    - acpid
+    - dkms
+    - gcc
+    - make
     - "kernel-devel-{{ ansible_kernel }}"
     - "kernel-headers-{{ ansible_kernel }}"
   become: true

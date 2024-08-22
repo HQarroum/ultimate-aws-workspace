@@ -2,9 +2,18 @@
 
 - include_vars: 'Gnome.yml'
 
+- name: Uninstall conflicting packages
+  dnf:
+    name: '{{ item }}'
+    state: absent
+  with_items:
+    - chronicled
+  ignore_errors: yes
+  become: true
+
 - name: Install workstation packages
   dnf:
-    name: '@workstation'
+    name: '@Server with GUI'
     state: present
   become: true
   register: workstation_packages

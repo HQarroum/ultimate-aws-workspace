@@ -13,6 +13,7 @@ source "amazon-ebs" "windows-nvidia" {
   winrm_port                  = var.ami.communicator.port
   winrm_use_ssl               = true
   winrm_insecure              = true
+  subnet_id                   = var.subnet_id != "" ? var.subnet_id : null
   
   source_ami_filter {
     filters = {
@@ -46,6 +47,7 @@ source "amazon-ebs" "windows-amd" {
   winrm_port                  = var.ami.communicator.port
   winrm_use_ssl               = true
   winrm_insecure              = true
+  subnet_id                   = var.subnet_id != "" ? var.subnet_id : null
   
   source_ami_filter {
     filters = {
@@ -79,6 +81,7 @@ source "amazon-ebs" "windows-no-gpu" {
   winrm_port                  = var.ami.communicator.port
   winrm_use_ssl               = true
   winrm_insecure              = true
+  subnet_id                   = var.subnet_id != "" ? var.subnet_id : null
   
   source_ami_filter {
     filters = {
