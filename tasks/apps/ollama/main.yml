@@ -1,0 +1,9 @@
+---
+
+- name: Include Ollama
+  include_tasks: "{{ ansible_distribution }}.yml"
+  when: ansible_os_family != 'Windows'
+
+- name: Include Ollama
+  include_tasks: Windows.yml
+  when: ansible_os_family == 'Windows'

@@ -12,6 +12,7 @@
   delay: 10
   timeout: 1800
   notify: reboot_windows
+  ignore_errors: yes
 
 - name: Remove Startup Applications
   ansible.windows.win_regedit:

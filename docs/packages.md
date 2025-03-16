@@ -33,7 +33,6 @@ Name                      | Description | License
 [build-essential](https://linuxhint.com/install-build-essential-ubuntu/) | The build-essentials packages are meta-packages that are necessary for compiling software. They include the GNU debugger, g++/GNU compiler collection, and some more tools and libraries that are required to compile a program. | Meta-package, see each package's license separately.
 [vim](https://www.vim.org/) | Vim is a highly configurable text editor built to make creating and changing any kind of text very efficient. It is included as "vi" with most UNIX systems and with Apple OS X. | Vim License
 [jq](https://stedolan.github.io/jq/) | jq is a lightweight and flexible command-line JSON processor. | MIT License
-[exa](https://github.com/ogham/exa) | exa is a modern replacement for ls. | MIT License
 [fzf](https://github.com/junegunn/fzf) | fzf is a general-purpose command-line fuzzy finder. | MIT License
 [gh](https://cli.github.com/) | GitHub CLI brings GitHub to your terminal. Free and open source. | MIT License
 [neofetch](https://github.com/dylanaraps/neofetch) | A command-line system information tool written in bash 3.2+. | MIT License
@@ -60,17 +59,13 @@ Name | Package Name | Description | License
 [DataGrip](https://flathub.org/apps/details/com.jetbrains.DataGrip) | `com.jetbrains.DataGrip` | IntelliJ-based IDE for databases and SQL. | Commercial
 [Emacs](https://flathub.org/apps/details/org.gnu.emacs) | `org.gnu.emacs` | An extensible text editor. | GPL-3.0-or-later
 
-### Snaps
+### AI
 
-> Those are packages provided by the [Snapstore](https://snapcraft.io/store) and installed as Snaps.
+> Those are packages that are used for AI and Machine Learning.
 
-Name                | Description | License
-------------------- | ----------- | -------
-[scrcpy](https://snapcraft.io/scrcpy) | This application provides display and control of Android devices connected on USB (or over TCP/IP). It does not require any root access. | Apache License 2.0
-[code](https://snapcraft.io/code) | Visual Studio Code is a new choice of tool that combines the simplicity of a code editor with what developers need for the core edit-build-debug cycle. | MIT License
-[terraform](https://snapcraft.io/terraform) | Terraform enables you to safely and predictably create, change, and improve infrastructure. | Mozilla Public License 2.0
-[kubectl](https://snapcraft.io/kubectl) | kubectl is a command line client for running commands against Kubernetes clusters. | Apache-2.0
-[nmap](https://snapcraft.io/nmap) | Nmap is a utility for network exploration or security auditing. | GPL-2.0
+Name | Description | License
+---- | ----------- | -------
+[Ollama](https://ollama.ai) | Get up and running with large language models. | MIT License
 
 ### Other Packages
 

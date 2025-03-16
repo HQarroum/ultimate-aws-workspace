@@ -36,7 +36,6 @@ native_packages:
   - build-essential
   - vim
   - jq
-  - exa
   - fzf
   - gh
   - neofetch
@@ -56,10 +55,10 @@ apt_repositories:
   - ppa:flatpak/stable
 
 # NiceDCV.
-nicedcv_major_version: "2023.1"
-nicedcv_package_version: "16388"
-nicedcv_gl_version: "1047"
-nicedcv_xdcv_version: "565"
+nicedcv_major_version: "2024.0"
+nicedcv_package_version: "18131"
+nicedcv_gl_version: "1078"
+nicedcv_xdcv_version: "631"
 nicedcv_folder_name: "nice-dcv-{{ nicedcv_major_version }}-{{ nicedcv_package_version }}-{{ distribution_name }}-{{ architecture }}"
 nicedcv_package_url: "https://d1uj6qtbmh3dt5.cloudfront.net/{{ nicedcv_major_version }}/Servers/{{ nicedcv_folder_name }}.tgz"
 nicedcv_server_package: "nice-dcv-server_{{ nicedcv_major_version }}.{{ nicedcv_package_version }}-1_{{ alt_architecture }}.{{ distribution_name }}.deb"

@@ -22,6 +22,7 @@
   apt:
     deb: /tmp/cuda-keyring.deb
     state: present
+  ignore_errors: yes
   become: true
 
 - name: Install NVIDIA Drivers

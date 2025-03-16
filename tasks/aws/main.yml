@@ -18,12 +18,3 @@
       tags: aws-ssm
   tags:
     - aws-ssm
-
-# Install the AWS Copilot CLI.
-- name: Include AWS Copilot CLI
-  include_tasks:
-    file: copilot-cli/main.yml
-    apply:
-      tags: copilot-cli
-  tags:
-    - copilot-cli

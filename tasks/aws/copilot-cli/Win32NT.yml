@@ -1,7 +1,0 @@
----
-
-- name: Install AWS Copilot CLI
-  ansible.windows.win_powershell:
-    script: Invoke-WebRequest -OutFile 'C:\Program Files\copilot.exe' https://github.com/aws/copilot-cli/releases/latest/download/copilot-windows.exe
-  args:
-    creates: C:\Program Files\copilot.exe

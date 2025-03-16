@@ -1,0 +1,9 @@
+---
+
+- name: Install Ollama
+  win_package:
+    path: https://ollama.com/download/OllamaSetup.exe
+    state: present
+    product_id: Ollama
+    arguments: '/install /quiet /norestart'
+    creates_path: 'C:\Program Files\Ollama'

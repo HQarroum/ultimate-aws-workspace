@@ -18,7 +18,6 @@ packages_to_install:
   - awscli
   - jq
   - terraform
-  - github-desktop
   - postman
   - kubernetes-cli
   # Network.
@@ -33,17 +32,14 @@ packages_to_install:
   # Audio and Video.
   - ffmpeg
   - vlc
-  # Tools.
-  - powertoys
-  - microsoft-windows-terminal
 
 # Chocolatey.
 chocolatey_installer: https://chocolatey.org/install.ps1
 chocolatey_path: c:/ProgramData/chocolatey
 
 # NiceDCV.
-nicedcv_msi_name: nice-dcv-server-x64-Release-2023.1-16388.msi
-nicedcv_server_package: "https://d1uj6qtbmh3dt5.cloudfront.net/2023.1/Servers/{{ nicedcv_msi_name }}"
+nicedcv_msi_name: nice-dcv-server-x64-Release-2024.0-18131.msi
+nicedcv_server_package: "https://d1uj6qtbmh3dt5.cloudfront.net/2024.0/Servers/{{ nicedcv_msi_name }}"
 nicedcv_registry_entries:
   # Enabled automatic session creation.
   - entry: "HKU:\\S-1-5-18\\Software\\GSettings\\com\\nicesoftware\\dcv\\session-management\\automatic-console-session"

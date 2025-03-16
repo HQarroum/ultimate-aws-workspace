@@ -11,6 +11,7 @@
 - name: Install the firewall Python Package
   pip:
     name: firewall
+    break_system_packages: yes
 
 - name: Apply Firewall Rules
   ansible.posix.firewalld:

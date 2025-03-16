@@ -36,6 +36,14 @@
     - gpu
     - nvidia
 
+# Install the applications.
+- name: Include Applications
+  include_tasks:
+    file: apps/main.yml
+    apply:
+      tags: apps
+  tags: apps
+
 # Install the Desktop Manager.
 - name: Include Desktop Manager
   include_tasks:

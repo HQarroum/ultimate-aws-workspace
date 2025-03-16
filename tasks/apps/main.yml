@@ -1,0 +1,9 @@
+---
+
+- name: Install Ollama
+  include_tasks:
+    file: ollama/main.yml
+    apply:
+      tags: ollama
+  tags:
+    - ollama

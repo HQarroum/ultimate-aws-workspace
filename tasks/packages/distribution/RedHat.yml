@@ -27,14 +27,18 @@
     use: dnf
   with_items: "{{ native_packages }}"
   become: true
+  ignore_errors: yes
 
 - name: Install Flatpaks
   flatpak:
     name: "{{ item }}"
   with_items: "{{ flatpak_packages }}"
   become: true
+  ignore_errors: yes
 
 - name: Install Pip Packages
   pip:
     name: "{{ item }}"
+    break_system_packages: yes
   with_items: "{{ pip_packages }}"
+  ignore_errors: yes

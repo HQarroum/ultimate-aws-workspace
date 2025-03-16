@@ -66,6 +66,7 @@
 - name: Install psutil
   pip:
     name: psutil
+    break_system_packages: yes
 
 - name: Apply Gnome preferences
   dconf:

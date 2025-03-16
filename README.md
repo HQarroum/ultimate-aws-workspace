@@ -10,7 +10,7 @@
 </p>
 <br>
 
-Current version: **1.1.0**
+Current version: **1.2.0**
 
 Lead Maintainer: [Halim Qarroum](mailto:hqm.post@gmail.com)
 
@@ -34,7 +34,7 @@ Lead Maintainer: [Halim Qarroum](mailto:hqm.post@gmail.com)
 - 💻 **Cross-Platform** - Supports latest images based on Ubuntu, RedHat and Windows Server.
 - 🤖 **Automated Deployments** -  Use [Ansible](https://github.com/ansible/ansible) to deploy, and [Packer](https://www.packer.io/) to create AMIs.
 - 📦 **Modern Package Management** - Packages based on [Flatpak](https://flatpak.org/) on Linux and [Chocolatey](https://chocolatey.org/) on Windows.
-- ☁️ **AWS Integrated** - Integrates with [SSM](https://docs.aws.amazon.com/systems-manager/latest/userguide/ssm-agent.html), [EFS](https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html), [Active Directory](https://docs.aws.amazon.com/directoryservice/latest/admin-guide/what_is.html), [Copilot CLI](https://aws.github.io/copilot-cli/).
+- ☁️ **AWS Integrated** - Integrates with [SSM](https://docs.aws.amazon.com/systems-manager/latest/userguide/ssm-agent.html), [EFS](https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html), [Active Directory](https://docs.aws.amazon.com/directoryservice/latest/admin-guide/what_is.html).
 
 ## 🔰 Description
 
@@ -103,7 +103,7 @@ An Ansible role is provided to provision new cloud instances with the necessary 
 
 **What operating systems are supported ?**
 
-> Ubuntu 22.04, RedHat 9 and Windows Server 2022 AWS provided AMIs are currently supported. Amazon Linux is not supported.
+> Ubuntu 24.04, RedHat 9 and Windows Server 2022 AWS provided AMIs are currently supported. Amazon Linux is not supported.
 
 **What CPU architectures are supported ?**
 

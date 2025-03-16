@@ -89,7 +89,6 @@ flatpak_packages:
   - com.jetbrains.DataGrip
   - org.gnu.emacs
   - com.google.AndroidStudio
-  - com.redis.RedisInsight
   - org.gnome.Snapshot
   - com.visualstudio.code
 
@@ -128,8 +127,8 @@ docker_compose_url:
   "https://github.com/docker/compose/releases/download/v{{ docker_compose_version }}/docker-compose-linux-{{ docker_compose_architecture_map[ansible_architecture].value }}"
 
 # Node.js.
-node_version: 'v20.14.0'
-nvm_version: '0.40.0'
+node_version: 'v22.14.0'
+nvm_version: '0.40.2'
 create_global_link: true
 
 # X Server.
