@@ -4,9 +4,6 @@
   <br><br>
   <h2 align="center">💻 Ultimate AWS Workspace</h2>
   <p align="center">A developer-friendly, low-latency, Cloud Desktop running on AWS EC2.<p>
-  <p align="center">
-    <a href="https://app.deepsource.com/gh/HQarroum/ultimate-aws-workspace/?ref=repository-badge}" target="_blank"><img alt="DeepSource" title="DeepSource" src="https://app.deepsource.com/gh/HQarroum/ultimate-aws-workspace.svg/?label=active+issues&show_trend=true"/></a>
-  </p>
 </p>
 <br>
 
@@ -103,7 +100,7 @@ An Ansible role is provided to provision new cloud instances with the necessary 
 
 **What operating systems are supported ?**
 
-> Ubuntu 24.04, RedHat 9 and Windows Server 2022 AWS provided AMIs are currently supported. Amazon Linux is not supported.
+> Ubuntu 22.04/24.04, RedHat 9 and Windows Server 2022/2025 AWS provided AMIs are currently supported. Amazon Linux is not supported.
 
 **What CPU architectures are supported ?**
 
